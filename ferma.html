@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mening Fermam - TON Ferma</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="ferma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="coin-status">
+            <img src="https://ton.org/download/ton_symbol.png" alt="TON" class="ton-icon-small">
+            <span id="balance">0.0000000</span>
+        </div>
+        <h2>Mening Fermam</h2>
+    </div>
+
+    <div class="main-content">
+        <div class="farm-stats-card">
+            <div class="stat-box">
+                <i class="fa-solid fa-kiwi-bird"></i>
+                <p>Tovuqlar</p>
+                <h3 id="chicken-count">0</h3>
+            </div>
+            <div class="stat-box">
+                <i class="fa-solid fa-egg"></i>
+                <p>Yig'ilmagan</p>
+                <h3 id="uncollected-eggs">0</h3>
+            </div>
+        </div>
+
+        <div id="farm-grid" class="farm-grid">
+            <div class="loading-msg">Tovuqlar yuklanmoqda...</div>
+        </div>
+
+        <button id="btn-collect-all" class="main-btn collect-all-btn">
+            <i class="fa-solid fa-basket-shopping"></i> Hammasini yig'ish
+        </button>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Asosiy</span></a>
+        <a href="bozor.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Bozor</span></a>
+        <a href="ferma.html" class="nav-item active"><i class="fa-solid fa-tractor"></i><span>Fermam</span></a>
+        <a href="profil.html" class="nav-item"><i class="fa-solid fa-user"></i><span>Profil</span></a>
+    </nav>
+
+    <script type="module" src="ferma.js"></script>
+</body>
+</html>

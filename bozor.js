@@ -4,18 +4,18 @@ async function initBozor() {
     const user = await getUserData();
     const userRef = ref(db, 'users/' + user.id);
 
-    // Balansni real vaqtda kuzatish va ko'rsatish
+    // Balansni tinglash va real vaqtda yangilash
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
             const balanceEl = document.getElementById('balance');
             if (balanceEl) {
-                // To'liq 7 ta raqamgacha aniqlikda chiqarish
                 balanceEl.innerText = parseFloat(data.balance || 0).toFixed(7);
             }
         }
     });
 
+    // Sotib olish tugmasi mantiqi
     const buyBtn = document.getElementById('btn-buy-chicken');
     if (buyBtn) {
         buyBtn.onclick = async () => {
@@ -28,12 +28,11 @@ async function initBozor() {
                     balance: current.balance - price,
                     chickens: (current.chickens || 0) + 1
                 });
-                alert("Tovuq sotib olindi!");
+                alert("Tovuq muvaffaqiyatli sotib olindi!");
             } else {
                 alert("Mablag' yetarli emas!");
             }
         };
     }
 }
-
 initBozor();

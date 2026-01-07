@@ -8,34 +8,32 @@ async function loadFarm() {
         const data = snapshot.val();
         if (data) {
             // Balansni yangilash
-            const balEl = document.getElementById('balance');
-            if (balEl) balEl.innerText = parseFloat(data.balance || 0).toFixed(7);
+            const balanceEl = document.getElementById('balance');
+            if (balanceEl) balanceEl.innerText = parseFloat(data.balance || 0).toFixed(7);
 
-            // Tovuqlar soni matni
+            // Tovuqlar soni
             const countEl = document.getElementById('chicken-count');
             if (countEl) countEl.innerText = data.chickens || 0;
 
-            // Vizual tovuqlar ro'yxati
+            // Tovuqlar ro'yxatini chiqarish
             const grid = document.getElementById('farm-grid');
             if (grid) {
-                grid.innerHTML = ""; 
+                grid.innerHTML = ""; // "Yuklanmoqda" yozuvini o'chirish
                 const count = data.chickens || 0;
+                
                 if (count === 0) {
-                    grid.innerHTML = "<p style='grid-column: 1/4;'>Sizda hali tovuq yo'q. Bozorga o'ting!</p>";
+                    grid.innerHTML = "<p>Hali tovuqlaringiz yo'q.</p>";
                 } else {
                     for (let i = 0; i < count; i++) {
-                        const chickenDiv = document.createElement('div');
-                        chickenDiv.className = 'chicken-item';
-                        chickenDiv.innerHTML = `
-                            <i class="fa-solid fa-kiwi-bird"></i>
-                            <p>Tovuq #${i + 1}</p>
-                        `;
-                        grid.appendChild(chickenDiv);
+                        grid.innerHTML += `
+                            <div class="chicken-item">
+                                <i class="fa-solid fa-kiwi-bird"></i>
+                                <p>Tovuq #${i + 1}</p>
+                            </div>`;
                     }
                 }
             }
         }
     });
 }
-
 loadFarm();

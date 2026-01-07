@@ -36,14 +36,13 @@ if (loginBtn) {
                 const userSnap = await getDoc(userRef);
 
                 if (!userSnap.exists()) {
-                    // Agar foydalanuvchi yangi bo'lsa, bazada profil yaratish
-                    await setDoc(userRef, {
-                        name: user.displayName,
-                        email: user.email,
-                        balance: 0,
-                        chickens: 1, // Sovg'a tovuq
-                        eggs: 0,
-                        lastLogin: new Date()
+    await setDoc(userRef, {
+        name: user.displayName,
+        email: user.email,
+        balance: 0,
+        chickens: 0, // Tekin tovuq berilmaydi
+        eggs: 0,
+        lastLogin: new Date()
                     });
                     console.log("Yangi foydalanuvchi yaratildi!");
                 }

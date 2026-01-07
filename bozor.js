@@ -4,16 +4,18 @@ async function initBozor() {
     const user = await getUserData();
     const userRef = ref(db, 'users/' + user.id);
 
-    // Balansni real vaqtda kuzatish
+    // Balansni real vaqtda kuzatish va ko'rsatish
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
             const balanceEl = document.getElementById('balance');
-            if (balanceEl) balanceEl.innerText = parseFloat(data.balance || 0).toFixed(7);
+            if (balanceEl) {
+                // To'liq 7 ta raqamgacha aniqlikda chiqarish
+                balanceEl.innerText = parseFloat(data.balance || 0).toFixed(7);
+            }
         }
     });
 
-    // Sotib olish tugmasi
     const buyBtn = document.getElementById('btn-buy-chicken');
     if (buyBtn) {
         buyBtn.onclick = async () => {
@@ -33,4 +35,5 @@ async function initBozor() {
         };
     }
 }
+
 initBozor();

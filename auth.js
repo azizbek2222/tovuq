@@ -12,12 +12,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+export const db = getDatabase(app);
+export { ref, get, set, onValue, update };
 
 export async function getUserData() {
     return new Promise((resolve) => {
         const tg = window.Telegram?.WebApp;
-        // Telegram ID bo'lmasa test uchun 123456 ishlatadi
         const user = tg?.initDataUnsafe?.user || { id: "123456", first_name: "Mehmon" };
         
         const userRef = ref(db, 'users/' + user.id);
@@ -26,7 +26,7 @@ export async function getUserData() {
                 const newUser = {
                     id: user.id,
                     name: user.first_name,
-                    balance: 0,
+                    balance: 0.0,
                     chickens: 0,
                     eggs: 0,
                     role: "user"
@@ -39,5 +39,3 @@ export async function getUserData() {
         });
     });
 }
-
-export { db, ref, onValue, update, get };

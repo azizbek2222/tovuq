@@ -7,25 +7,23 @@ async function loadFarm() {
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            // Balansni yangilash (Agar HTMLda id="balance" bo'lsa)
-            const balanceElement = document.getElementById('balance');
-            if (balanceElement) {
-                balanceElement.innerText = parseFloat(data.balance || 0).toFixed(7);
-            }
+            // Balans
+            const balEl = document.getElementById('balance');
+            if (balEl) balEl.innerText = parseFloat(data.balance || 0).toFixed(7);
 
-            // Tovuqlar sonini yangilash
-            const chickenCount = data.chickens || 0;
-            const countDisplay = document.getElementById('chicken-count');
-            if (countDisplay) countDisplay.innerText = chickenCount;
+            // Tovuqlar soni
+            const countEl = document.getElementById('chicken-count');
+            if (countEl) countEl.innerText = data.chickens || 0;
 
-            // Tovuqlarni vizual ko'rsatish
+            // Vizual tovuqlar
             const grid = document.getElementById('farm-grid');
             if (grid) {
-                grid.innerHTML = "";
-                if (chickenCount === 0) {
-                    grid.innerHTML = "<p>Sizda hali tovuqlar yo'q.</p>";
+                grid.innerHTML = ""; // "Yuklanmoqda" yozuvini o'chiradi
+                const count = data.chickens || 0;
+                if (count === 0) {
+                    grid.innerHTML = "<p>Sizda hali tovuq yo'q.</p>";
                 } else {
-                    for (let i = 0; i < chickenCount; i++) {
+                    for (let i = 0; i < count; i++) {
                         grid.innerHTML += `
                             <div class="chicken-item">
                                 <i class="fa-solid fa-kiwi-bird"></i>
@@ -37,5 +35,4 @@ async function loadFarm() {
         }
     });
 }
-
 loadFarm();

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCBAZ9Edi3Rh5qWf-AYesrQS6P2U51tvBs",
@@ -13,23 +13,31 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const tg = window.Telegram.WebApp;
 
 export async function getUserData() {
-    const user = tg.initDataUnsafe?.user || { id: "test_user", first_name: "Admin" };
-    const userRef = ref(db, 'users/' + user.id);
-    const snapshot = await get(userRef);
-    
-    if (!snapshot.exists()) {
-        const newUser = { 
-            id: user.id, 
-            name: user.first_name, 
-            balance: 0, 
-            role: "user" // Standart foydalanuvchi roli
-        };
-        await set(userRef, newUser);
-        return newUser;
-    }
-    return snapshot.val();
+    return new Promise((resolve) => {
+        const tg = window.Telegram?.WebApp;
+        // Telegram ID bo'lmasa test uchun 123456 ishlatadi
+        const user = tg?.initDataUnsafe?.user || { id: "123456", first_name: "Mehmon" };
+        
+        const userRef = ref(db, 'users/' + user.id);
+        get(userRef).then(async (snapshot) => {
+            if (!snapshot.exists()) {
+                const newUser = {
+                    id: user.id,
+                    name: user.first_name,
+                    balance: 0,
+                    chickens: 0,
+                    eggs: 0,
+                    role: "user"
+                };
+                await set(userRef, newUser);
+                resolve(newUser);
+            } else {
+                resolve(snapshot.val());
+            }
+        });
+    });
 }
-export { db, tg, ref, onValue };
+
+export { db, ref, onValue, update, get };

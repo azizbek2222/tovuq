@@ -1,11 +1,44 @@
-<div class="dashboard">
-    <h2>Xush kelibsiz, <span id="user-name">Fermer</span>!</h2>
-    <div class="stats">
-        <p>Balans: <b id="user-balance">0</b> so'm</p>
-        <p>Tovuqlar: <b id="user-chickens">1</b> ta</p>
-        <p>Tuxumlar: <b id="user-eggs">0</b> ta</p>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mening Fermam - Dashboard</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Tovuq Biznes</h1>
+        <button id="btn-logout">Chiqish</button>
     </div>
-    
-    <button onclick="feedChickens()">Tovuqlarni boqish (Reklama)</button>
-    <button onclick="collectEggs()">Tuxumlarni yig'ish</button>
-</div>
+
+    <div class="main-container">
+        <div class="user-info">
+            <h2 id="display-name">Yuklanmoqda...</h2>
+            <p id="user-email"></p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>💰 Balans</h3>
+                <p><span id="balance">0</span> so'm</p>
+            </div>
+            <div class="stat-card">
+                <h3>🐔 Tovuqlar</h3>
+                <p><span id="chickens">0</span> ta</p>
+            </div>
+            <div class="stat-card">
+                <h3>🥚 Tuxumlar</h3>
+                <p><span id="eggs">0</span> ta</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-action" id="btn-feed">🌾 Tovuqlarni boqish (Reklama)</button>
+            <button class="btn-action" id="btn-collect">🧺 Tuxumlarni yig'ish</button>
+        </div>
+    </div>
+
+    <script type="module" src="home.js"></script>
+</body>
+</html>

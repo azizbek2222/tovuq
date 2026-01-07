@@ -1,25 +1,41 @@
-import { getUser, db, ref, onValue } from './auth.js';
+import { getUserData, db, ref, onValue } from './auth.js';
 
 async function loadFarm() {
-    const userData = await getUser();
-    const userRef = ref(db, 'users/' + userData.id);
+    const user = await getUserData();
+    const userRef = ref(db, 'users/' + user.id);
 
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            const grid = document.getElementById('farm-grid');
-            grid.innerHTML = "";
-            const count = data.chickens || 0;
-            document.getElementById('chicken-count').innerText = count;
+            // Balansni yangilash (Agar HTMLda id="balance" bo'lsa)
+            const balanceElement = document.getElementById('balance');
+            if (balanceElement) {
+                balanceElement.innerText = parseFloat(data.balance || 0).toFixed(7);
+            }
 
-            for (let i = 0; i < count; i++) {
-                grid.innerHTML += `
-                    <div class="chicken-item">
-                        <i class="fa-solid fa-kiwi-bird"></i>
-                        <p>Tovuq #${i + 1}</p>
-                    </div>`;
+            // Tovuqlar sonini yangilash
+            const chickenCount = data.chickens || 0;
+            const countDisplay = document.getElementById('chicken-count');
+            if (countDisplay) countDisplay.innerText = chickenCount;
+
+            // Tovuqlarni vizual ko'rsatish
+            const grid = document.getElementById('farm-grid');
+            if (grid) {
+                grid.innerHTML = "";
+                if (chickenCount === 0) {
+                    grid.innerHTML = "<p>Sizda hali tovuqlar yo'q.</p>";
+                } else {
+                    for (let i = 0; i < chickenCount; i++) {
+                        grid.innerHTML += `
+                            <div class="chicken-item">
+                                <i class="fa-solid fa-kiwi-bird"></i>
+                                <p>Tovuq #${i + 1}</p>
+                            </div>`;
+                    }
+                }
             }
         }
     });
 }
+
 loadFarm();

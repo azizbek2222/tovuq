@@ -3,41 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mening Fermam - Dashboard</title>
+    <title>Mening Fermam</title>
     <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Tovuq Biznes</h1>
-        <button id="btn-logout">Chiqish</button>
-    </div>
 
-    <div class="main-container">
-        <div class="user-info">
-            <h2 id="display-name">Yuklanmoqda...</h2>
-            <p id="user-email"></p>
+    <div class="top-bar">
+        <div class="coin-status">
+            <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" alt="coin">
+            <span id="balance">0</span>
         </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>💰 Balans</h3>
-                <p><span id="balance">0</span> so'm</p>
-            </div>
-            <div class="stat-card">
-                <h3>🐔 Tovuqlar</h3>
-                <p><span id="chickens">0</span> ta</p>
-            </div>
-            <div class="stat-card">
-                <h3>🥚 Tuxumlar</h3>
-                <p><span id="eggs">0</span> ta</p>
-            </div>
-        </div>
-
-        <div class="actions">
-            <button class="btn-action" id="btn-feed">🌾 Tovuqlarni boqish (Reklama)</button>
-            <button class="btn-action" id="btn-collect">🧺 Tuxumlarni yig'ish</button>
+        <div class="user-id">
+            <i class="fa-solid fa-user-ninja"></i>
+            <span id="user-name">Fermer</span>
         </div>
     </div>
+
+    <div class="main-content">
+        <div class="farm-area">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <i class="fa-solid fa-egg"></i>
+                    <p>Tuxumlar: <span id="eggs">0</span></p>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-crow"></i>
+                    <p>Tovuqlar: <span id="chickens">0</span></p>
+                </div>
+            </div>
+            
+            <div class="chicken-display">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJpbmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/3o7TKMGpxx6rQbcU5G/giphy.gif" alt="chicken">
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn-feed" class="main-btn">🌾 Tovuqlarni boqish</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Asosiy</span>
+        </a>
+        <a href="bozor.html" class="nav-item">
+            <i class="fa-solid fa-shop"></i>
+            <span>Bozor</span>
+        </a>
+        <a href="ferma.html" class="nav-item">
+            <i class="fa-solid fa-tractor"></i>
+            <span>Fermam</span>
+        </a>
+        <a href="profil.html" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Profilim</span>
+        </a>
+    </nav>
 
     <script type="module" src="home.js"></script>
 </body>

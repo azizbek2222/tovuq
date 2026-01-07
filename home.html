@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mening Fermam - Dashboard</title>
+    <title>TON Ferma - Dashboard</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* GIF-siz yangi markaziy dizayn */
+        .ton-icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
         .chicken-icon-wrapper {
             width: 150px;
             height: 150px;
@@ -18,22 +23,16 @@
             align-items: center;
             margin: 40px auto;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border: 5px solid #ffce54;
+            border: 5px solid #0088cc; /* TON ko'k rangi */
         }
-
         .chicken-icon-wrapper i {
             font-size: 80px;
             color: #e67e22;
             animation: bounce 2s infinite;
         }
-
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
-        }
-
-        .main-content {
-            padding-bottom: 100px; /* Menyu uchun joy */
         }
     </style>
 </head>
@@ -41,8 +40,8 @@
 
     <div class="top-bar">
         <div class="coin-status">
-            <i class="fa-solid fa-coins" style="color: #f1c40f; margin-right: 8px;"></i>
-            <span id="balance">0</span>
+            <img src="https://ton.org/download/ton_symbol.png" class="ton-icon" alt="TON">
+            <span id="balance">0.0000000</span>
         </div>
         <div class="user-id">
             <i class="fa-solid fa-circle-user"></i>
@@ -52,15 +51,14 @@
 
     <div class="main-content">
         <div class="farm-area">
-            
             <div class="stats-container">
                 <div class="stat-item">
                     <i class="fa-solid fa-egg" style="color: #f39c12;"></i>
-                    <p>Tuxumlar: <span id="eggs">0</span></p>
+                    <p>Tuxum: <span id="eggs">0</span></p>
                 </div>
                 <div class="stat-item">
                     <i class="fa-solid fa-feather-pointed" style="color: #e67e22;"></i>
-                    <p>Tovuqlar: <span id="chickens">0</span></p>
+                    <p>Tovuq: <span id="chickens">0</span></p>
                 </div>
             </div>
             
@@ -73,27 +71,14 @@
                     <i class="fa-solid fa-wheat-awn"></i> Tovuqlarni boqish
                 </button>
             </div>
-
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item active">
-            <i class="fa-solid fa-house"></i>
-            <span>Asosiy</span>
-        </a>
-        <a href="bozor.html" class="nav-item">
-            <i class="fa-solid fa-store"></i>
-            <span>Bozor</span>
-        </a>
-        <a href="ferma.html" class="nav-item">
-            <i class="fa-solid fa-tractor"></i>
-            <span>Fermam</span>
-        </a>
-        <a href="profil.html" class="nav-item">
-            <i class="fa-solid fa-user-gear"></i>
-            <span>Profilim</span>
-        </a>
+        <a href="home.html" class="nav-item active"><i class="fa-solid fa-house"></i><span>Asosiy</span></a>
+        <a href="bozor.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Bozor</span></a>
+        <a href="ferma.html" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Fermam</span></a>
+        <a href="profil.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>Profilim</span></a>
     </nav>
 
     <script type="module" src="home.js"></script>

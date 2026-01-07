@@ -19,24 +19,20 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         const userRef = doc(db, "users", user.uid);
         
-        // Real-time ma'lumotlarni yangilash
         onSnapshot(userRef, (doc) => {
             if (doc.exists()) {
                 const data = doc.data();
-                document.getElementById('balance').innerText = data.balance;
-                document.getElementById('chickens').innerText = data.chickens;
-                document.getElementById('eggs').innerText = data.eggs;
+                // Balansni TON formatiga o'tkazish
+                document.getElementById('balance').innerText = parseFloat(data.balance || 0).toFixed(7);
+                document.getElementById('chickens').innerText = data.chickens || 0;
+                document.getElementById('eggs').innerText = data.eggs || 0;
                 document.getElementById('user-name').innerText = user.displayName || "Fermer";
             }
         });
 
-        // Tovuq boqish tugmasi
         document.getElementById('btn-feed').onclick = async () => {
-            // SHU YERGA REKLAMA KODINI QO'SHASIZ
-            alert("Tovuqlar to'ydirildi! +3 ta tuxum yig'ildi.");
-            await updateDoc(userRef, {
-                eggs: increment(3)
-            });
+            alert("Tovuqlar boqildi! +3 tuxum.");
+            await updateDoc(userRef, { eggs: increment(3) });
         };
     } else {
         window.location.href = "login.html";

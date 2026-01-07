@@ -3,49 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bozor - Tovuq sotib olish</title>
+    <title>Bozor - TON Shop</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .shop-card { background: white; padding: 20px; border-radius: 15px; margin: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .ton-icon-small { width: 16px; height: 16px; margin-right: 3px; vertical-align: middle; }
+    </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="coin-status">
-            <i class="fa-solid fa-coins" style="color: #f1c40f;"></i>
-            <span id="balance">0</span>
+            <img src="https://ton.org/download/ton_symbol.png" class="ton-icon-small" alt="TON">
+            <span id="balance">0.0000000</span>
         </div>
         <h2>Bozor</h2>
     </div>
 
     <div class="main-content">
         <div class="shop-card">
-            <div class="shop-icon">
-                <i class="fa-solid fa-kiwi-bird" style="font-size: 50px; color: #e67e22;"></i>
-            </div>
+            <i class="fa-solid fa-kiwi-bird" style="font-size: 50px; color: #e67e22;"></i>
             <h3>Oddiy Tovuq</h3>
-            <p>Narxi: 500 so'm</p>
-            <p>Har boqishda 5 ta tuxum beradi</p>
+            <p>Narxi: <b>0.5000000 TON</b></p>
             <button id="btn-buy-chicken" class="main-btn">Sotib olish</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item">
-            <i class="fa-solid fa-house"></i>
-            <span>Asosiy</span>
-        </a>
-        <a href="bozor.html" class="nav-item active">
-            <i class="fa-solid fa-store"></i>
-            <span>Bozor</span>
-        </a>
-        <a href="ferma.html" class="nav-item">
-            <i class="fa-solid fa-tractor"></i>
-            <span>Fermam</span>
-        </a>
-        <a href="profil.html" class="nav-item">
-            <i class="fa-solid fa-user-gear"></i>
-            <span>Profilim</span>
-        </a>
+        <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Asosiy</span></a>
+        <a href="bozor.html" class="nav-item active"><i class="fa-solid fa-store"></i><span>Bozor</span></a>
+        <a href="ferma.html" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Fermam</span></a>
+        <a href="profil.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>Profilim</span></a>
     </nav>
 
     <script type="module" src="bozor.js"></script>

@@ -24,11 +24,17 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         const userRef = doc(db, "users", user.uid);
         
-        // Balansni real vaqtda kuzatib borish
+        // Balansni real vaqtda kuzatib borish va TON formatida ko'rsatish
         onSnapshot(userRef, (docSnap) => {
             if (docSnap.exists()) {
-                userBalance = docSnap.data().balance;
-                document.getElementById('balance').innerText = userBalance;
+                // Ma'lumotni olish yoki 0 deb hisoblash
+                userBalance = docSnap.data().balance || 0;
+                
+                // Balansni 0.0000000 formatida ekranga chiqarish
+                const balanceElement = document.getElementById('balance');
+                if (balanceElement) {
+                    balanceElement.innerText = parseFloat(userBalance).toFixed(7);
+                }
             }
         });
 
@@ -36,27 +42,27 @@ onAuthStateChanged(auth, (user) => {
         const buyBtn = document.getElementById('btn-buy-chicken');
         if (buyBtn) {
             buyBtn.onclick = async () => {
-                const chickenPrice = 500; // Tovuq narxi
+                const chickenPrice = 0.5; // Tovuq narxi: 0.5 TON
 
                 if (userBalance >= chickenPrice) {
                     try {
-                        // Balansdan ayirish va tovuq qo'shish
+                        // Balansdan ayirish va tovuq sonini oshirish
                         await updateDoc(userRef, {
                             balance: increment(-chickenPrice),
                             chickens: increment(1)
                         });
-                        alert("Tabriklaymiz! Tovuq sotib olindi.");
+                        alert("Muvaffaqiyatli sotib olindi! Tovuqlaringiz soni bittaga ko'paydi.");
                     } catch (error) {
                         console.error("Xatolik:", error);
-                        alert("Amalni bajarib bo'lmadi.");
+                        alert("Amalni bajarishda xatolik yuz berdi. Internetni tekshiring.");
                     }
                 } else {
-                    alert("Mablag' yetarli emas! Tovuq sotib olish uchun 500 so'm kerak.");
+                    alert("Mablag' yetarli emas! Tovuq sotib olish uchun kamida 0.5000000 TON kerak.");
                 }
             };
         }
     } else {
-        // Tizimga kirmagan bo'lsa login sahifasiga o'tkazish
+        // Agar foydalanuvchi tizimga kirmagan bo'lsa, login sahifasiga qaytarish
         window.location.href = "login.html";
     }
 });

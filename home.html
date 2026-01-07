@@ -3,17 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mening Fermam - Asosiy</title>
+    <title>Mening Fermam - Dashboard</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .chicken-display img {
+        /* GIF-siz yangi markaziy dizayn */
+        .chicken-icon-wrapper {
             width: 150px;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            /* Pixel-art rasm tiniq chiqishi uchun */
-            image-rendering: pixelated;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: 5px solid #ffce54;
+        }
+
+        .chicken-icon-wrapper i {
+            font-size: 80px;
+            color: #e67e22;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .main-content {
+            padding-bottom: 100px; /* Menyu uchun joy */
         }
     </style>
 </head>
@@ -21,33 +41,31 @@
 
     <div class="top-bar">
         <div class="coin-status">
-            <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" alt="coin">
+            <i class="fa-solid fa-coins" style="color: #f1c40f; margin-right: 8px;"></i>
             <span id="balance">0</span>
         </div>
         <div class="user-id">
-            <i class="fa-solid fa-user-circle"></i>
+            <i class="fa-solid fa-circle-user"></i>
             <span id="user-name">Yuklanmoqda...</span>
         </div>
     </div>
 
     <div class="main-content">
         <div class="farm-area">
+            
             <div class="stats-container">
                 <div class="stat-item">
-                    <i class="fa-solid fa-egg" style="color: #f1c40f;"></i>
+                    <i class="fa-solid fa-egg" style="color: #f39c12;"></i>
                     <p>Tuxumlar: <span id="eggs">0</span></p>
                 </div>
                 <div class="stat-item">
-                    <i class="fa-solid fa-kiwi-bird" style="color: #e67e22;"></i>
+                    <i class="fa-solid fa-feather-pointed" style="color: #e67e22;"></i>
                     <p>Tovuqlar: <span id="chickens">0</span></p>
                 </div>
             </div>
             
-            <div class="chicken-display">
-                <img src="https://minecraft.wiki/images/Chicken_Anim.gif" 
-                     alt="Tovuq" 
-                     id="main-chicken"
-                     onerror="this.src='https://cdn-icons-png.flaticon.com/512/1864/1864514.png'">
+            <div class="chicken-icon-wrapper">
+                <i class="fa-solid fa-kiwi-bird"></i>
             </div>
 
             <div class="action-buttons">
@@ -55,6 +73,7 @@
                     <i class="fa-solid fa-wheat-awn"></i> Tovuqlarni boqish
                 </button>
             </div>
+
         </div>
     </div>
 
@@ -64,7 +83,7 @@
             <span>Asosiy</span>
         </a>
         <a href="bozor.html" class="nav-item">
-            <i class="fa-solid fa-shop"></i>
+            <i class="fa-solid fa-store"></i>
             <span>Bozor</span>
         </a>
         <a href="ferma.html" class="nav-item">

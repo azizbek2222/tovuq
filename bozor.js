@@ -4,7 +4,7 @@ async function initBozor() {
     const user = await getUserData();
     const userRef = ref(db, 'users/' + user.id);
 
-    // Balansni tinglash va real vaqtda yangilash
+    // Balansni ekranda ko'rsatish
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -15,24 +15,25 @@ async function initBozor() {
         }
     });
 
-    // Sotib olish tugmasi mantiqi
+    // Sotib olish tugmasi
     const buyBtn = document.getElementById('btn-buy-chicken');
     if (buyBtn) {
         buyBtn.onclick = async () => {
-            const snap = await get(userRef);
-            const current = snap.val();
-            const price = 0.5;
+            const snapshot = await get(userRef);
+            const currentData = snapshot.val();
+            const price = 0.5; // 0.5 TON
 
-            if (current && current.balance >= price) {
+            if (currentData && currentData.balance >= price) {
                 await update(userRef, {
-                    balance: current.balance - price,
-                    chickens: (current.chickens || 0) + 1
+                    balance: currentData.balance - price,
+                    chickens: (currentData.chickens || 0) + 1
                 });
-                alert("Tovuq muvaffaqiyatli sotib olindi!");
+                alert("Tabriklaymiz! Tovuq sotib olindi.");
             } else {
                 alert("Mablag' yetarli emas!");
             }
         };
     }
 }
+
 initBozor();

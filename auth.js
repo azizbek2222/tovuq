@@ -13,28 +13,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const tg = window.Telegram?.WebApp;
 
 export async function getUserData() {
-    // Telegram user bo'lmasa, test uchun ID ishlatadi
-    const user = tg?.initDataUnsafe?.user || { id: "test_user", first_name: "Admin" };
-    const userRef = ref(db, 'users/' + user.id);
-    const snapshot = await get(userRef);
-    
-    if (!snapshot.exists()) {
-        const newUser = { 
-            id: user.id, 
-            name: user.first_name, 
-            balance: 0, 
-            chickens: 0, 
-            eggs: 0, 
-            role: "user" 
-        };
-        await set(userRef, newUser);
-        return newUser;
-    }
-    return snapshot.val();
+    return new Promise((resolve) => {
+        const tg = window.Telegram?.WebApp;
+        // Telegram ID bo'lmasa, test uchun 123456789 ishlatadi
+        const user = tg?.initDataUnsafe?.user || { id: "123456789", first_name: "Mehmon" };
+        
+        const userRef = ref(db, 'users/' + user.id);
+        get(userRef).then(async (snapshot) => {
+            if (!snapshot.exists()) {
+                const newUser = {
+                    id: user.id,
+                    name: user.first_name,
+                    balance: 0,
+                    chickens: 0,
+                    eggs: 0
+                };
+                await set(userRef, newUser);
+                resolve(newUser);
+            } else {
+                resolve(snapshot.val());
+            }
+        });
+    });
 }
 
-// Boshqa fayllar ishlata olishi uchun eksportlar
 export { db, ref, onValue, update, get };

@@ -1,10 +1,10 @@
-import { getUserData, db, ref, onValue, update, get } from './auth.js';
+import { getUserId, db, ref, onValue, update, get } from './auth.js';
 
 async function initBozor() {
-    const user = await getUserData();
-    const userRef = ref(db, 'users/' + user.id);
+    const userId = await getUserId();
+    const userRef = ref(db, 'users/' + userId);
 
-    // Balansni ekranda ko'rsatish
+    // Balansni REAL VAQTDA kuzatish
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -15,25 +15,23 @@ async function initBozor() {
         }
     });
 
-    // Sotib olish tugmasi
     const buyBtn = document.getElementById('btn-buy-chicken');
     if (buyBtn) {
         buyBtn.onclick = async () => {
             const snapshot = await get(userRef);
             const currentData = snapshot.val();
-            const price = 0.5; // 0.5 TON
+            const price = 0.5; 
 
             if (currentData && currentData.balance >= price) {
                 await update(userRef, {
                     balance: currentData.balance - price,
                     chickens: (currentData.chickens || 0) + 1
                 });
-                alert("Tabriklaymiz! Tovuq sotib olindi.");
+                alert("Tovuq sotib olindi!");
             } else {
                 alert("Mablag' yetarli emas!");
             }
         };
     }
 }
-
 initBozor();

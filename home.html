@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Farm</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>GAMEE - Asosiy Sahifa</title>
     <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="coin-status">
-            <img src="https://freetoncoin.in/icons/ton-icon.svg" width="20">
-            <span id="balance">0.0000000</span>
-        </div>
-        <div id="admin-area"></div>
+
+    <div class="app-container">
+        <header class="header">
+            <div class="balance-card">
+                <span class="label">Mening Balansim</span>
+                <div class="amount-container">
+                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="coin-icon">
+                    <span id="balance">0.000000</span> <span class="currency">USDT</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-selection">
+            <h1>O'yinni Tanlang</h1>
+            <div class="buttons-grid">
+                <a href="spin.html" class="game-card spin">
+                    <div class="icon">🎡</div>
+                    <span>Lucky Spin</span>
+                </a>
+                <a href="mines.html" class="game-card mines">
+                    <div class="icon">💣</div>
+                    <span>Mines</span>
+                </a>
+            </div>
+        </main>
     </div>
-
-    <div class="main-content">
-        <h2 id="user-display-name">Yuklanmoqda...</h2>
-        <div class="stats-container">
-            <div class="stat-item"><i class="fa-solid fa-egg"></i> <span id="eggs-count">0</span></div>
-            <div class="stat-item"><i class="fa-solid fa-kiwi-bird"></i> <span id="chickens-count">0</span></div>
-        </div>
-
-        <div class="farm-display">
-            <i class="fa-solid fa-kiwi-bird bounce"></i>
-        </div>
-
-        <button class="main-btn" id="collect-eggs">Tuxumlarni yig'ish</button>
-    </div>
-
-    <nav class="bottom-nav">
-        <a href="home.html" class="active"><i class="fa-solid fa-house"></i><span>Asosiy</span></a>
-        <a href="bozor.html"><i class="fa-solid fa-store"></i><span>Bozor</span></a>
-        <a href="ferma.html"><i class="fa-solid fa-tractor"></i><span>Ferma</span></a>
-        <a href="profile.html"><i class="fa-solid fa-user"></i><span>Profil</span></a>
-    </nav>
 
     <script type="module" src="home.js"></script>
 </body>

@@ -21,6 +21,11 @@ async function loadProfile() {
     }
 }
 
+// Referal sahifasiga o'tish tugmasi
+document.getElementById('referralBtn').onclick = () => {
+    window.location.href = 'referal.html';
+};
+
 // Withdraw sahifasiga o'tish tugmasi
 document.getElementById('withdrawBtn').onclick = () => {
     window.location.href = 'withdraw.html';

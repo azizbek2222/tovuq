@@ -8,12 +8,12 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script type="text/javascript" src="https://cdn.tgads.space/assets/js/adexium-widget.min.js"></script>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', () => {
-        const adexiumWidget = new AdexiumWidget({wid: 'aeecb468-1230-4318-9133-a324f54bb179', adFormat: 'push-like'});
-        adexiumWidget.autoMode();
-    });
-</script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const adexiumWidget = new AdexiumWidget({wid: 'aeecb468-1230-4318-9133-a324f54bb179', adFormat: 'push-like'});
+            adexiumWidget.autoMode();
+        });
+    </script>
 
     <style>
         /* HAVOLA VA NUSXALASHNI BLOKLASH */
@@ -24,6 +24,14 @@
             -webkit-tap-highlight-color: transparent;
         }
         .nav-item { cursor: pointer; }
+        
+        /* Referal tugmasi uchun qo'shimcha uslub */
+        .referral-button {
+            background: #3498db; 
+            color: white; 
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -41,7 +49,11 @@
             <p>Sizning ID: <b id="user-id">---</b></p>
             <p>Jami tovuqlar: <b id="profile-chickens">0</b> ta</p>
             
-            <button id="withdrawBtn" class="buy-button" style="background: #f39c12; color: white; margin-top: 15px;">
+            <button id="referralBtn" class="buy-button referral-button">
+                Referal bo'limi
+            </button>
+
+            <button id="withdrawBtn" class="buy-button" style="background: #f39c12; color: white;">
                 Withdraw
             </button>
         </div>

@@ -2,54 +2,33 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chicken Farm - Ferma</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        .chicken-list {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
+        /* ASOSIY HIMOYA */
+        * {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent;
         }
+        .chicken-list { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .chicken-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fff;
-            padding: 12px 15px;
-            border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: #fff; padding: 12px 15px; border-radius: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .chicken-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .life-text {
-            font-size: 11px;
-            color: #7f8c8d;
-        }
-        .timer-text {
-            font-size: 12px;
-            color: #e67e22;
-            font-weight: bold;
-        }
+        .chicken-info { display: flex; flex-direction: column; gap: 2px; }
+        .life-text { font-size: 11px; color: #7f8c8d; }
+        .timer-text { font-size: 12px; color: #e67e22; font-weight: bold; }
         .collect-mini-btn {
-            padding: 8px 12px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
+            padding: 8px 12px; background: #27ae60; color: white;
+            border: none; border-radius: 8px; font-size: 12px; cursor: pointer;
         }
-        .collect-mini-btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-        }
+        .collect-mini-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+        .nav-item { cursor: pointer; }
     </style>
 </head>
 <body>
@@ -65,26 +44,28 @@
             <h3>Mening Tovuqlarim</h3>
             <p>Jami faol: <b id="chicken-count">0</b> ta</p>
         </div>
-
-        <div id="chicken-container" class="chicken-list">
-            </div>
+        <div id="chicken-container" class="chicken-list"></div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item">
+        <div class="nav-item" onclick="location.href='home.html'">
             <span class="icon">🏠</span><span class="text">Asosiy</span>
-        </a>
-        <a href="market.html" class="nav-item">
+        </div>
+        <div class="nav-item" onclick="location.href='market.html'">
             <span class="icon">🛒</span><span class="text">Market</span>
-        </a>
-        <a href="farm.html" class="nav-item active">
+        </div>
+        <div class="nav-item active" onclick="location.href='farm.html'">
             <span class="icon">🐔</span><span class="text">Ferma</span>
-        </a>
-        <a href="profile.html" class="nav-item">
+        </div>
+        <div class="nav-item" onclick="location.href='profile.html'">
             <span class="icon">👤</span><span class="text">Profil</span>
-        </a>
+        </div>
     </nav>
 
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
     <script type="module" src="farm.js"></script>
 </body>
 </html>

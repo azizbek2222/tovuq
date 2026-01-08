@@ -3,42 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Farm TMA</title>
+    <title>Chicken Farm - Home</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-
     <div class="header">
         <div class="balance-card">
-            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" width="20" alt="TON">
-            <span id="balance">0.00</span> TON
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20" alt="USDT">
+            <span id="balance">0.00000</span> USDT
         </div>
     </div>
 
-    <div id="main-content" class="content">
+    <div class="content">
+        <div class="card">
+            <h2>Xush kelibsiz!</h2>
+            <p>Fermangizni rivojlantiring va USDT ishlang.</p>
+            <div class="farm-icon">🏡</div>
+            <img src="https://cdn-icons-png.flaticon.com/512/2662/2662207.png" width="100">
         </div>
+    </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchPage('home')">
-            <span class="icon">🏠</span>
-            <span class="text">Asosiy</span>
-        </div>
-        <div class="nav-item" onclick="switchPage('market')">
-            <span class="icon">🛒</span>
-            <span class="text">Market</span>
-        </div>
-        <div class="nav-item" onclick="switchPage('farm')">
-            <span class="icon">🐔</span>
-            <span class="text">Ferma</span>
-        </div>
-        <div class="nav-item" onclick="switchPage('profile')">
-            <span class="icon">👤</span>
-            <span class="text">Profil</span>
-        </div>
+        <a href="home.html" class="nav-item active">
+            <span class="icon">🏠</span><span class="text">Asosiy</span>
+        </a>
+        <a href="market.html" class="nav-item">
+            <span class="icon">🛒</span><span class="text">Market</span>
+        </a>
+        <a href="farm.html" class="nav-item">
+            <span class="icon">🐔</span><span class="text">Ferma</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <span class="icon">👤</span><span class="text">Profil</span>
+        </a>
     </nav>
 
-    <script type="module" src="firebase.js"></script>
     <script type="module" src="home.js"></script>
 </body>
 </html>

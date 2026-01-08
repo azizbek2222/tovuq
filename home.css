@@ -79,3 +79,16 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     border-bottom: 4px solid #ccc;
 }
+
+.nav-item {
+    text-decoration: none; /* Chiziqni olib tashlash */
+    color: #d7ccc8;
+}
+.buy-button {
+    padding: 12px 25px;
+    background: #f1c40f;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}

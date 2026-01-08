@@ -54,8 +54,8 @@ async function renderFarm() {
 
         item.innerHTML = `
             <div class="chicken-info">
-                <span>🐔 Tovuq #${index + 1}</span>
-                <span class="life-text">Umri: ${daysLeft} kun qoldi</span>
+                <span>🐔 Chicken #${index + 1}</span>
+                <span class="life-text">Lifespan: ${daysLeft} days left</span>
             </div>
             ${actionContent}
         `;

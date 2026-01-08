@@ -40,7 +40,7 @@ function checkCooldown(lastRewardTime) {
     if (timeLeft > 0) {
         // Agar vaqt hali tugamagan bo'lsa
         btn.disabled = true;
-        btn.innerText = "Vaqt kuting";
+        btn.innerText = "Wait for the time.";
         timerContainer.style.display = "block";
         
         // Taymerni ishga tushirish
@@ -53,7 +53,7 @@ function checkCooldown(lastRewardTime) {
             if (currentLeft <= 0) {
                 clearInterval(timerInterval);
                 btn.disabled = false;
-                btn.innerText = "Reklama ko'rish";
+                btn.innerText = "View advertisement";
                 timerContainer.style.display = "none";
                 document.getElementById('ad-counter').innerText = "0 / 10";
                 adCount = 0;
@@ -77,7 +77,7 @@ const showNextAd = () => {
     if (btn.disabled) return; // Agar tugma bloklangan bo'lsa, ishlamasin
 
     const currentBlockId = blockIds[currentBlockIndex];
-    console.log("Yuklanmoqda: ", currentBlockId);
+    console.log("Loading: ", currentBlockId);
     
     const AdController = window.Adsgram.init({ blockId: currentBlockId });
 
@@ -103,13 +103,13 @@ const showNextAd = () => {
             // Taymerni darhol ishga tushirish
             checkCooldown(now); 
 
-            tg.showAlert("Tabriklaymiz! Yangi tovuq qo'shildi. Keyingi urinish 1 soatdan keyin.");
+            tg.showAlert("Congratulations! New chicken added. Next attempt in 1 hour.");
         } else {
-            tg.showConfirm(`Reklama qabul qilindi! Yana ${10 - adCount} ta qoldi.`);
+            tg.showConfirm(`Ad accepted! ${10 - adCount} left.`);
         }
     }).catch((err) => {
         console.error("Adsgram xatosi:", err);
-        tg.showAlert("Reklama hozircha tayyor emas. Qayta urinib ko'ring.");
+        tg.showAlert("The ad is not ready yet. Please try again..");
     });
 };
 
@@ -138,11 +138,11 @@ async function buyChickenBtn() {
 
             tg.showAlert(`Muvaffaqiyatli! Tovuq sotib olindi. Balans: ${newBalance.toFixed(5)} USDT`);
         } else {
-            tg.showAlert("Hisobingizda mablag' yetarli emas! (Kerak: 0.0003 USDT)");
+            tg.showAlert("There are not enough funds in your account! (Required: 0.0003 USDT))");
         }
     } catch (error) {
-        console.error("Xatolik:", error);
-        tg.showAlert("Xatolik yuz berdi, qayta urinib ko'ring.");
+        console.error("Error:", error);
+        tg.showAlert("An error occurred, please try again..");
     } finally {
         buyBtn.disabled = false; // Tugmani qayta yoqish
     }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Referral Program</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ref-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .ref-link-box {
+            background: #f8f9fa;
+            border: 2px dashed #3498db;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .stat-item {
+            background: #e1f5fe;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        .stat-item b { font-size: 18px; color: #0288d1; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="balance-card">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20">
+            <span id="balance">0.00000</span> USDT
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="ref-card">
+            <h2>Invite Friends</h2>
+            <p style="font-size: 14px; color: #7f8c8d;">Earn <b>0.00005 USDT</b> for every new friend who joins!</p>
+            
+            <div class="ref-link-box" id="referral-link">Generating link...</div>
+            
+            <button id="copyBtn" class="buy-button" style="background: #3498db; color: white;">Copy Link</button>
+            <button id="shareBtn" class="buy-button" style="background: #27ae60; color: white; margin-top: 8px;">Share on Telegram</button>
+
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <p>Friends</p>
+                    <b id="ref-count">0</b>
+                </div>
+                <div class="stat-item">
+                    <p>Earned</p>
+                    <b id="ref-earned">0.00000</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="location.href='home.html'">🏠<br>Home</div>
+        <div class="nav-item" onclick="location.href='market.html'">🛒<br>Market</div>
+        <div class="nav-item" onclick="location.href='farm.html'">🐔<br>Farm</div>
+        <div class="nav-item active" onclick="location.href='profile.html'">👤<br>Profile</div>
+    </nav>
+
+    <script type="module" src="referal.js"></script>
+</body>
+</html>

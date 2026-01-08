@@ -9,31 +9,45 @@
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
     <script type="text/javascript" src="https://cdn.tgads.space/assets/js/adexium-widget.min.js"></script>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', () => {
-        const adexiumWidget = new AdexiumWidget({wid: 'aeecb468-1230-4318-9133-a324f54bb179', adFormat: 'push-like'});
-        adexiumWidget.autoMode();
-    });
-</script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const adexiumWidget = new AdexiumWidget({wid: 'aeecb468-1230-4318-9133-a324f54bb179', adFormat: 'push-like'});
+            adexiumWidget.autoMode();
+        });
+    </script>
 
     <style>
         /* LINK VA NUSXALASHNI TO'SISH UCHUN ASOSIY CSS */
         * {
-            -webkit-touch-callout: none !important; /* iOS uzoq bosish menyusini o'chiradi */
-            -webkit-user-select: none !important;    /* Matn tanlashni o'chiradi */
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
             user-select: none !important;
-            -webkit-tap-highlight-color: transparent; /* Bosganda ko'k rang chiqishini o'chiradi */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Navigatsiya elementlari uchun cursor */
-        .nav-item {
-            cursor: pointer;
+        .nav-item { cursor: pointer; }
+        input, textarea { -webkit-user-select: text !important; user-select: text !important; }
+
+        /* Market kartalari orasidagi masofa */
+        .card { margin-bottom: 20px; }
+
+        /* Vaqt hisoblagichi uslubi */
+        #timer-container {
+            display: none; /* Boshida yashirin bo'ladi */
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 5px;
+            border-radius: 8px;
         }
 
-        /* Inputlar ishlashi uchun (agar bo'lsa) */
-        input, textarea {
-            -webkit-user-select: text !important;
-            user-select: text !important;
+        /* O'chirilgan tugma uslubi */
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
         }
     </style>
 </head>
@@ -47,11 +61,25 @@
 
     <div class="content">
         <div class="card">
-            <h3>Market</h3>
+            <h3>Tekinga olish</h3>
             <div style="font-size: 40px; margin: 10px 0;">🐣</div>
             <p>Yangi tovuq olish uchun 10 ta reklama ko'ring</p>
+            
             <p id="ad-counter" style="font-weight: bold; font-size: 20px; color: #e67e22;">0 / 10</p>
+            
+            <div id="timer-container">
+                Keyingi urinish: <span id="timer">59:59</span>
+            </div>
+
             <button id="watchAdBtn" class="buy-button">Reklama ko'rish</button>
+        </div>
+
+        <div class="card">
+            <h3>Sotib olish</h3>
+            <div style="font-size: 40px; margin: 10px 0;">🐔</div>
+            <p>Reklama ko'rmasdan darhol sotib oling</p>
+            <p style="font-weight: bold; color: #2ecc71;">Narxi: 0.0003 USDT</p>
+            <button id="buyBtn" class="buy-button" style="background: #27ae60;">0.0003 USDT ga olish</button>
         </div>
     </div>
 
@@ -75,13 +103,8 @@
     </nav>
 
     <script>
-        // 1. O'ng tugma va kontekst menyuni bloklash (Android/Desktop)
         document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // 2. Rasmlarni sudrab olishni bloklash
         document.addEventListener('dragstart', e => e.preventDefault());
-
-        // Telegram WebApp sozlamalari
         const tg = window.Telegram.WebApp;
         tg.expand();
     </script>

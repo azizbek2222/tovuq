@@ -3,38 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMEE - Asosiy Sahifa</title>
+    <title>Chicken Farm TMA</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
-    <div class="app-container">
-        <header class="header">
-            <div class="balance-card">
-                <span class="label">Mening Balansim</span>
-                <div class="amount-container">
-                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="coin-icon">
-                    <span id="balance">0.000000</span> <span class="currency">USDT</span>
-                </div>
-            </div>
-        </header>
-
-        <main class="game-selection">
-            <h1>O'yinni Tanlang</h1>
-            <div class="buttons-grid">
-                <a href="spin.html" class="game-card spin">
-                    <div class="icon">🎡</div>
-                    <span>Lucky Spin</span>
-                </a>
-                <a href="mines.html" class="game-card mines">
-                    <div class="icon">💣</div>
-                    <span>Mines</span>
-                </a>
-            </div>
-        </main>
+    <div class="header">
+        <div class="balance-card">
+            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" width="20" alt="TON">
+            <span id="balance">0.00</span> TON
+        </div>
     </div>
 
+    <div id="main-content" class="content">
+        </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchPage('home')">
+            <span class="icon">🏠</span>
+            <span class="text">Asosiy</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('market')">
+            <span class="icon">🛒</span>
+            <span class="text">Market</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('farm')">
+            <span class="icon">🐔</span>
+            <span class="text">Ferma</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('profile')">
+            <span class="icon">👤</span>
+            <span class="text">Profil</span>
+        </div>
+    </nav>
+
+    <script type="module" src="firebase.js"></script>
     <script type="module" src="home.js"></script>
 </body>
 </html>

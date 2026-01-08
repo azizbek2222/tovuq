@@ -3,53 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil - Chicken Farm</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Profile</title>
     <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="top-bar">
-        <h2>Mening Profilim</h2>
+    <div class="header">
+        <div class="balance-card">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20">
+            <span id="balance">0.00000</span> USDT
+        </div>
     </div>
 
-    <div class="profile-container">
-        <div class="profile-header">
-            <img id="user-photo" src="https://via.placeholder.com/100" alt="User Photo">
-            <h2 id="user-full-name">Yuklanmoqda...</h2>
-            <span class="user-id-badge">ID: <span id="user-id">000000</span></span>
-        </div>
-
-        <div class="profile-stats">
-            <div class="p-stat-card">
-                <img src="https://freetoncoin.in/icons/ton-icon.svg" width="30">
-                <div class="p-info">
-                    <span>Asosiy Balans</span>
-                    <h3 id="p-balance">0.0000000 TON</h3>
-                </div>
-            </div>
-
-            <div class="p-stat-card">
-                <i class="fa-solid fa-kiwi-bird" style="color: #e67e22; font-size: 30px;"></i>
-                <div class="p-info">
-                    <span>Jami Tovuqlar</span>
-                    <h3 id="p-chickens">0 dona</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile-actions">
-            <button class="action-btn-outline"><i class="fa-solid fa-arrow-up-from-bracket"></i> Pul chiqarish</button>
-            <button class="action-btn-outline"><i class="fa-solid fa-wallet"></i> Hamyonni ulash</button>
+    <div class="content">
+        <div class="card">
+            <h3>Foydalanuvchi Profili</h3>
+            <div style="font-size: 50px; margin: 10px 0;">👤</div>
+            <p>Sizning ID: <b id="user-id">---</b></p>
+            <p>Jami tovuqlar: <b id="profile-chickens">0</b> ta</p>
+            <button onclick="window.Telegram.WebApp.close()" class="buy-button" style="background: #e74c3c; color: white;">O'yinni yopish</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html"><i class="fa-solid fa-house"></i><span>Asosiy</span></a>
-        <a href="bozor.html"><i class="fa-solid fa-store"></i><span>Bozor</span></a>
-        <a href="ferma.html"><i class="fa-solid fa-tractor"></i><span>Ferma</span></a>
-        <a href="profile.html" class="active"><i class="fa-solid fa-user"></i><span>Profil</span></a>
+        <a href="home.html" class="nav-item">
+            <span class="icon">🏠</span><span class="text">Asosiy</span>
+        </a>
+        <a href="market.html" class="nav-item">
+            <span class="icon">🛒</span><span class="text">Market</span>
+        </a>
+        <a href="farm.html" class="nav-item">
+            <span class="icon">🐔</span><span class="text">Ferma</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <span class="icon">👤</span><span class="text">Profil</span>
+        </a>
     </nav>
 
     <script type="module" src="profile.js"></script>

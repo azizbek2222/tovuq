@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farm</title>
+    <title>Chicken Farm - Ferma</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="header">
         <div class="balance-card">
-            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20" alt="USDT">
             <span id="balance">0.00000</span> USDT
         </div>
     </div>
@@ -19,16 +19,30 @@
         <div class="card">
             <h3>Sizning Fermangiz</h3>
             <p>Tovuqlar soni: <b id="chicken-count">0</b> ta</p>
-            <div class="chicken-animation">🐔</div>
-            <button id="collectBtn" class="buy-button" style="background: #27ae60;">USDT Yig'ish</button>
+            <div class="chicken-animation" style="font-size: 80px; margin: 20px 0;">🐔</div>
+            <button id="collectBtn" class="buy-button" style="background: #27ae60; color: white;">
+                USDT Yig'ish
+            </button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item">🏠<br>Asosiy</a>
-        <a href="market.html" class="nav-item">🛒<br>Market</a>
-        <a href="farm.html" class="nav-item active">🐔<br>Ferma</a>
-        <a href="profile.html" class="nav-item">👤<br>Profil</a>
+        <a href="home.html" class="nav-item">
+            <span class="icon">🏠</span>
+            <span class="text">Asosiy</span>
+        </a>
+        <a href="market.html" class="nav-item">
+            <span class="icon">🛒</span>
+            <span class="text">Market</span>
+        </a>
+        <a href="farm.html" class="nav-item active">
+            <span class="icon">🐔</span>
+            <span class="text">Ferma</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <span class="icon">👤</span>
+            <span class="text">Profil</span>
+        </a>
     </nav>
 
     <script type="module" src="farm.js"></script>

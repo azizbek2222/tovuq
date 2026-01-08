@@ -6,6 +6,42 @@
     <title>Chicken Farm - Ferma</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .chicken-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .chicken-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .timer-text {
+            font-size: 12px;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .collect-mini-btn {
+            padding: 8px 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .collect-mini-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -17,31 +53,26 @@
 
     <div class="content">
         <div class="card">
-            <h3>Sizning Fermangiz</h3>
-            <p>Tovuqlar soni: <b id="chicken-count">0</b> ta</p>
-            <div class="chicken-animation" style="font-size: 80px; margin: 20px 0;">🐔</div>
-            <button id="collectBtn" class="buy-button" style="background: #27ae60; color: white;">
-                USDT Yig'ish
-            </button>
+            <h3>Mening Tovuqlarim</h3>
+            <p>Jami faol: <b id="chicken-count">0</b> ta</p>
         </div>
+
+        <div id="chicken-container" class="chicken-list">
+            </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
-            <span class="icon">🏠</span>
-            <span class="text">Asosiy</span>
+            <span class="icon">🏠</span><span class="text">Asosiy</span>
         </a>
         <a href="market.html" class="nav-item">
-            <span class="icon">🛒</span>
-            <span class="text">Market</span>
+            <span class="icon">🛒</span><span class="text">Market</span>
         </a>
         <a href="farm.html" class="nav-item active">
-            <span class="icon">🐔</span>
-            <span class="text">Ferma</span>
+            <span class="icon">🐔</span><span class="text">Ferma</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <span class="icon">👤</span>
-            <span class="text">Profil</span>
+            <span class="icon">👤</span><span class="text">Profil</span>
         </a>
     </nav>
 

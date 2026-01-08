@@ -5,11 +5,11 @@ const userId = tg.initDataUnsafe?.user?.id || "test_user";
 
 // 5 ta turli xil Block ID ro'yxati
 const blockIds = [
-    "int-20798", // 1-blok
-    "int-20799", // 2-blok (O'zingiznikini qo'ying)
-    "int-20801", // 3-blok
-    "int-20802", // 4-blok
-    "int-20803"  // 5-blok
+    "int-20817", // 1-blok
+    "int-20817", // 2-blok (O'zingiznikini qo'ying)
+    "int-20817", // 3-blok
+    "int-20817", // 4-blok
+    "int-20817"  // 5-blok
 ];
 
 let currentBlockIndex = 0;

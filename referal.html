@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* HAVOLA VA NUSXALASHNI BLOKLASH */
         * {
             -webkit-touch-callout: none !important;
             -webkit-user-select: none !important;
             user-select: none !important;
             -webkit-tap-highlight-color: transparent;
         }
+
         .ref-card {
             background: white;
             padding: 20px;
@@ -22,6 +24,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             margin-top: 20px;
         }
+
         .ref-link-box {
             background: #f8f9fa;
             border: 2px dashed #3498db;
@@ -31,25 +34,37 @@
             word-break: break-all;
             font-size: 14px;
             color: #2c3e50;
+            user-select: text !important; /* Faqat havola qismini nusxalashga ruxsat */
+            -webkit-user-select: text !important;
         }
+
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 15px;
         }
+
         .stat-item {
             background: #e1f5fe;
             padding: 10px;
             border-radius: 12px;
         }
-        .stat-item b { font-size: 18px; color: #0288d1; }
+
+        .stat-item b {
+            font-size: 18px;
+            color: #0288d1;
+        }
+
+        .nav-item {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="balance-card">
-            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="20" alt="USDT">
             <span id="balance">0.00000</span> USDT
         </div>
     </div>
@@ -78,12 +93,28 @@
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item" onclick="location.href='home.html'">🏠<br>Home</div>
-        <div class="nav-item" onclick="location.href='market.html'">🛒<br>Market</div>
-        <div class="nav-item" onclick="location.href='farm.html'">🐔<br>Farm</div>
-        <div class="nav-item active" onclick="location.href='profile.html'">👤<br>Profile</div>
+        <div class="nav-item" onclick="location.href='home.html'">
+            <span class="icon">🏠</span><span class="text">Asosiy</span>
+        </div>
+        <div class="nav-item" onclick="location.href='market.html'">
+            <span class="icon">🛒</span><span class="text">Market</span>
+        </div>
+        <div class="nav-item" onclick="location.href='farm.html'">
+            <span class="icon">🐔</span><span class="text">Ferma</span>
+        </div>
+        <div class="nav-item active" onclick="location.href='profile.html'">
+            <span class="icon">👤</span><span class="text">Profil</span>
+        </div>
     </nav>
 
+    <script>
+        // Xavfsizlik choralari
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
+
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+    </script>
     <script type="module" src="referal.js"></script>
 </body>
 </html>

@@ -2,10 +2,28 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chicken Farm - Home</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* LINK VA NUSXALASHNI TO'SISH UCHUN ASOSIY CSS */
+        * {
+            -webkit-touch-callout: none !important; /* iOS uzoq bosishni o'chiradi */
+            -webkit-user-select: none !important;    /* Matn tanlashni o'chiradi */
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent; /* Bosganda ko'k rang chiqishini o'chiradi */
+        }
+
+        /* Sahifa dizayni buzilmasligi uchun pastki menyu stili */
+        .nav-item {
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -19,26 +37,38 @@
         <div class="card">
             <h2>Xush kelibsiz!</h2>
             <p>Fermangizni rivojlantiring va USDT ishlang.</p>
-            <div class="farm-icon">🏡</div>
-            <img src="https://cdn-icons-png.flaticon.com/512/2662/2662207.png" width="100">
+            <div class="farm-icon" style="font-size: 80px;">🏡</div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item active">
+        <div class="nav-item active" onclick="location.href='home.html'">
             <span class="icon">🏠</span><span class="text">Asosiy</span>
-        </a>
-        <a href="market.html" class="nav-item">
+        </div>
+        <div class="nav-item" onclick="location.href='market.html'">
             <span class="icon">🛒</span><span class="text">Market</span>
-        </a>
-        <a href="farm.html" class="nav-item">
+        </div>
+        <div class="nav-item" onclick="location.href='farm.html'">
             <span class="icon">🐔</span><span class="text">Ferma</span>
-        </a>
-        <a href="profile.html" class="nav-item">
+        </div>
+        <div class="nav-item" onclick="location.href='profile.html'">
             <span class="icon">👤</span><span class="text">Profil</span>
-        </a>
+        </div>
     </nav>
 
+    <script>
+        // 1. O'ng tugma va kontekst menyuni butunlay bloklash
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 2. Rasmlarni sudrab olishni bloklash (havolani himoya qilish)
+        document.addEventListener('dragstart', e => e.preventDefault());
+
+        // Telegram interfeysini kengaytirish
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Balansni yangilash mantiqi (Firebase orqali bo'lsa, home.js ni ham ulab qo'ying)
+    </script>
     <script type="module" src="home.js"></script>
 </body>
 </html>

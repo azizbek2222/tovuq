@@ -9,7 +9,8 @@ const blockIds = [
     "int-20819", // 2-blok (O'zingiznikini qo'ying)
     "int-20820", // 3-blok
     "int-20821", // 4-blok
-    "int-20822"  // 5-blok
+    "int-20822", // 5-blok
+    "int-20824"  // 6-blok
 ];
 
 let currentBlockIndex = 0;

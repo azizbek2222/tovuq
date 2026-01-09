@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel - Rasm va Xabar</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .admin-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #333; text-align: center; }
+        textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; resize: vertical; min-height: 100px; box-sizing: border-box; }
+        input[type="file"] { margin: 10px 0; font-size: 14px; }
+        button { width: 100%; padding: 12px; background: #0088cc; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        button:hover { background: #0077b5; }
+        #status { margin-top: 20px; font-size: 14px; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.6; }
+        .loading { color: orange; font-weight: bold; }
+        .success { color: green; font-weight: bold; }
+        .preview { width: 100%; max-height: 200px; object-fit: contain; margin: 10px 0; display: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <h2>📢 Xabar Tarqatish</h2>
+    <p style="font-size: 12px; color: #666;">Rasm va matnni barcha foydalanuvchilarga yuborish.</p>
+    
+    <label style="font-size: 14px; font-weight: bold;">Rasm tanlang (ixtiyoriy):</label><br>
+    <input type="file" id="photoInput" accept="image/*" onchange="previewImage(this)">
+    <img id="imagePreview" class="preview">
+
+    <label style="font-size: 14px; font-weight: bold;">Xabar matni:</label>
+    <textarea id="broadcastMsg" placeholder="Xabar matnini kiriting..."></textarea>
+    
+    <button onclick="sendToAll()">🚀 Yuborishni Boshlash</button>
+
+    <div id="status"></div>
+</div>
+
+<script type="module">
+    import { db, ref, get } from './firebase.js';
+
+    const BOT_TOKEN = '8256396972:AAHUvjiqPtSLCGw6olvlhB0banQj7alEyI0';
+
+    // Rasmni tanlanganda ko'rsatish funksiyasi
+    window.previewImage = function(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    window.sendToAll = async function() {
+        const text = document.getElementById('broadcastMsg').value;
+        const photoFile = document.getElementById('photoInput').files[0];
+        const statusDiv = document.getElementById('status');
+
+        if (!text && !photoFile) {
+            alert("Iltimos, hech bo'lmasa matn yoki rasm kiriting!");
+            return;
+        }
+
+        statusDiv.innerHTML = '<span class="loading">Bazadan foydalanuvchilar olinmoqda...</span>';
+
+        try {
+            const usersRef = ref(db, 'users');
+            const snapshot = await get(usersRef);
+
+            if (!snapshot.exists()) {
+                statusDiv.innerHTML = "Bazada foydalanuvchilar topilmadi.";
+                return;
+            }
+
+            const usersData = snapshot.val();
+            const userIds = Object.keys(usersData);
+            
+            statusDiv.innerHTML = `<span class="loading">Xabar ${userIds.length} kishiga yuborilmoqda...</span>`;
+
+            let sentCount = 0;
+            let errorCount = 0;
+
+            for (const id of userIds) {
+                try {
+                    let response;
+                    
+                    if (photoFile) {
+                        // Agar rasm bo'lsa sendPhoto ishlatamiz
+                        const formData = new FormData();
+                        formData.append('chat_id', id);
+                        formData.append('photo', photoFile);
+                        formData.append('caption', text);
+                        formData.append('parse_mode', 'HTML');
+
+                        response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    } else {
+                        // Agar faqat matn bo'lsa sendMessage
+                        response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chat_id: id,
+                                text: text,
+                                parse_mode: 'HTML'
+                            })
+                        });
+                    }
+
+                    if (response.ok) {
+                        sentCount++;
+                    } else {
+                        errorCount++;
+                    }
+                } catch (err) {
+                    errorCount++;
+                }
+            }
+
+            statusDiv.innerHTML = `<span class="success">✅ Tugatildi!<br>Muvaffaqiyatli: ${sentCount}<br>Xatolik (bloklaganlar): ${errorCount}</span>`;
+
+        } catch (error) {
+            console.error(error);
+            statusDiv.innerHTML = "Xatolik yuz berdi. Konsolni tekshiring.";
+        }
+    }
+</script>
+
+</body>
+</html>

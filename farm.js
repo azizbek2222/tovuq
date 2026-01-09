@@ -49,7 +49,7 @@ async function renderFarm() {
         let actionContent = '';
         if (canCollect) {
             // Tugmani ID bilan yaratamizki, keyin uni oson o'chiraylik
-            actionContent = `<button class="collect-mini-btn" id="btn-${index}" data-index="${index}">Yig'ish</button>`;
+            actionContent = `<button class="collect-mini-btn" id="btn-${index}" data-index="${index}">Assembly</button>`;
         } else {
             const remaining = COOLDOWN_MS - timePassed;
             actionContent = `<span class="timer-text" data-remain="${remaining}">${formatTime(remaining)}</span>`;
@@ -58,7 +58,7 @@ async function renderFarm() {
         item.innerHTML = `
             <div class="chicken-info">
                 <span>🐔 Chicken #${index + 1}</span>
-                <span class="life-text">Lifespan: ${daysLeft > 0 ? daysLeft : 0} kun qoldi</span>
+                <span class="life-text">Lifespan: ${daysLeft > 0 ? daysLeft : 0} days left</span>
             </div>
             ${actionContent}
         `;
@@ -82,7 +82,7 @@ async function collectFromChicken(index, buttonElement) {
         isCollecting = true; // Jarayon boshlandi
         if (buttonElement) {
             buttonElement.disabled = true; // Tugmani darhol o'chirish
-            buttonElement.innerText = "Kuting...";
+            buttonElement.innerText = "Wait...";
         }
 
         const userRef = ref(db, 'users/' + userId);
@@ -90,7 +90,7 @@ async function collectFromChicken(index, buttonElement) {
         let data = snapshot.val();
         
         if (!data || !data.chickens_list || !data.chickens_list[index]) {
-            throw new Error("Ma'lumot topilmadi");
+            throw new Error("Information not found");
         }
 
         const now = Date.now();
@@ -98,7 +98,7 @@ async function collectFromChicken(index, buttonElement) {
 
         // Baza darajasida vaqtni qayta tekshirish (xavfsizlik uchun)
         if (now - lastCol < COOLDOWN_MS) {
-            tg.showAlert("Vaqt hali kelmadi!");
+            tg.showAlert("The time has not come yet.!");
             renderFarm();
             return;
         }
@@ -112,11 +112,11 @@ async function collectFromChicken(index, buttonElement) {
             chickens_list: data.chickens_list
         });
 
-        tg.showAlert(`Daromad yig'ildi: ${INCOME_PER_CHICKEN} USDT`);
+        tg.showAlert(`Revenue collected: ${INCOME_PER_CHICKEN} USDT`);
         
     } catch (error) {
         console.error("Xatolik:", error);
-        tg.showAlert("Internet aloqasi sust, qaytadan urunib ko'ring.");
+        tg.showAlert("The internet connection is slow, please try again..");
     } finally {
         isCollecting = false; // Jarayon tugadi
         renderFarm(); // Ekranni qayta chizish

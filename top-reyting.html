@@ -1,161 +1,124 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Top 100 Rating</title>
+    <title>Global Leaderboard</title>
     <link rel="stylesheet" href="home.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --primary-bg: #f4f7f6;
-            --card-bg: #ffffff;
-            --gold: #FFD700;
-            --silver: #C0C0C0;
-            --bronze: #CD7F32;
-            --accent: #3498db;
+            --bg-color: #f8faff;
+            --main-gradient: linear-gradient(135deg, #2c3e50, #4b6cb7);
+            --card-white: #ffffff;
+            --text-dark: #2c3e50;
+            --gold: #f1c40f;
+            --silver: #bdc3c7;
+            --bronze: #cd7f32;
         }
 
-        body { background-color: var(--primary-bg); font-family: 'Segoe UI', Roboto, sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+        }
 
-        /* Yuqori qism (Podium) dizayni */
-        .podium {
+        /* Hero Section with Podium */
+        .hero-section {
+            background: var(--main-gradient);
+            padding: 40px 15px 30px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero-section h2 { margin: 0 0 25px; font-size: 22px; font-weight: 700; }
+
+        .podium-container {
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            gap: 10px;
-            padding: 20px 10px;
-            margin-bottom: 20px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            color: white;
+            gap: 15px;
         }
 
-        .podium-item {
+        .podium-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px 10px;
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            flex: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s;
         }
 
-        .avatar-container {
-            position: relative;
-            margin-bottom: 10px;
+        .podium-card.rank-1 { transform: scale(1.1); background: rgba(255, 255, 255, 0.25); z-index: 2; border-color: var(--gold); }
+        .podium-card .medal { font-size: 30px; margin-bottom: 5px; }
+        .podium-card .uid { font-size: 11px; font-weight: bold; opacity: 0.9; margin-bottom: 8px; max-width: 80px; overflow: hidden; }
+        .podium-card .stats { font-size: 10px; line-height: 1.4; font-weight: 600; }
+
+        /* List Section */
+        .ranking-list {
+            padding: 20px 15px 100px;
         }
 
-        .podium-avatar {
-            width: 60px;
-            height: 60px;
-            background: #ecf0f1;
-            border-radius: 50%;
+        .list-item {
+            background: var(--card-white);
+            border-radius: 18px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            border: 3px solid transparent;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
         }
 
-        .rank-badge {
-            position: absolute;
-            bottom: -5px;
-            right: -5px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #2c3e50;
-        }
+        .item-rank { width: 35px; font-weight: 800; color: #a0aec0; font-size: 16px; }
+        .item-info { flex: 1; }
+        .item-uid { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .item-sub { font-size: 12px; color: #718096; margin-top: 2px; }
+        .item-refs { font-weight: 800; color: #3182ce; font-size: 13px; background: #ebf8ff; padding: 6px 10px; border-radius: 10px; }
 
-        /* Top 1 alohida kattaroq */
-        .podium-item.first .podium-avatar { width: 80px; height: 80px; font-size: 40px; border-color: var(--gold); }
-        .podium-item.first .rank-badge { background: var(--gold); width: 30px; height: 30px; }
-        .podium-item.second .podium-avatar { border-color: var(--silver); }
-        .podium-item.second .rank-badge { background: var(--silver); }
-        .podium-item.third .podium-avatar { border-color: var(--bronze); }
-        .podium-item.third .rank-badge { background: var(--bronze); }
-
-        .podium-id { font-size: 12px; font-weight: bold; margin-top: 5px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
-        .podium-count { font-size: 11px; opacity: 0.8; }
-
-        /* Ro'yxat qismi */
-        .ranking-list { display: flex; flex-direction: column; gap: 8px; padding: 0 15px 100px 15px; }
-        
-        .ranking-item {
-            display: flex;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 12px 15px;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
-
-        .rank-num {
-            width: 35px;
-            font-weight: 800;
-            font-size: 16px;
-            color: #bdc3c7;
-        }
-
-        .user-info { flex-grow: 1; }
-        .user-id { font-size: 14px; font-weight: 600; color: #2c3e50; }
-        .user-stats { font-size: 12px; color: #95a5a6; margin-top: 2px; }
-
-        .score-box {
-            text-align: right;
-            background: #f8f9fa;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            color: var(--accent);
-            font-size: 13px;
-        }
-
-        #status-msg { text-align: center; padding: 40px; color: #7f8c8d; font-style: italic; }
-        .error-msg { color: #e74c3c !important; font-weight: bold; }
+        #loading-overlay { text-align: center; padding: 40px; color: #718096; }
     </style>
 </head>
 <body>
-    <div class="header" style="background: #2c3e50; border:none; color: white;">
-        <h3 style="margin:0; font-size: 18px;">Leaderboard</h3>
-    </div>
 
-    <div class="content" style="margin-top:0;">
-        <div id="podium-container" class="podium" style="display: none;">
-            <div class="podium-item second" id="p-2">
-                <div class="avatar-container">
-                    <div class="podium-avatar">🥈</div>
-                    <div class="rank-badge">2</div>
+    <div class="hero-section">
+        <h2>Global Top 100</h2>
+        <div id="podium-view" class="podium-container" style="display: none;">
+            <div class="podium-card" id="rank-2">
+                <div class="medal">🥈</div>
+                <div class="uid">Loading...</div>
+                <div class="stats">
+                    👥 0 Refs<br>🐔 0 Chickens
                 </div>
-                <div class="podium-id">---</div>
-                <div class="podium-count">0 ref</div>
             </div>
-            <div class="podium-item first" id="p-1">
-                <div class="avatar-container">
-                    <div class="podium-avatar">🥇</div>
-                    <div class="rank-badge">1</div>
+            <div class="podium-card rank-1" id="rank-1">
+                <div class="medal">🥇</div>
+                <div class="uid">Loading...</div>
+                <div class="stats">
+                    👥 0 Refs<br>🐔 0 Chickens
                 </div>
-                <div class="podium-id">---</div>
-                <div class="podium-count">0 ref</div>
             </div>
-            <div class="podium-item third" id="p-3">
-                <div class="avatar-container">
-                    <div class="podium-avatar">🥉</div>
-                    <div class="rank-badge">3</div>
+            <div class="podium-card" id="rank-3">
+                <div class="medal">🥉</div>
+                <div class="uid">Loading...</div>
+                <div class="stats">
+                    👥 0 Refs<br>🐔 0 Chickens
                 </div>
-                <div class="podium-id">---</div>
-                <div class="podium-count">0 ref</div>
             </div>
         </div>
+    </div>
 
-        <div id="status-msg">Loading...</div>
-        <div id="ranking-container" class="ranking-list"></div>
+    <div class="content">
+        <div id="loading-overlay">Syncing global data...</div>
+        <div id="ranking-list-container" class="ranking-list"></div>
     </div>
 
     <nav class="bottom-nav">

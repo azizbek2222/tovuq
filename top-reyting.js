@@ -1,71 +1,71 @@
 import { db, ref, get } from './firebase.js';
 
-const statusMsg = document.getElementById('status-msg');
-const container = document.getElementById('ranking-container');
-const podium = document.getElementById('podium-container');
+const loadingEl = document.getElementById('loading-overlay');
+const podiumEl = document.getElementById('podium-view');
+const listContainer = document.getElementById('ranking-list-container');
 
-async function fetchRanking() {
+async function initRanking() {
     try {
         const usersRef = ref(db, 'users');
         const snapshot = await get(usersRef);
 
         if (!snapshot.exists()) {
-            statusMsg.innerText = "No data yet..";
+            loadingEl.innerText = "No players in the ranking yet.";
             return;
         }
 
-        const allData = snapshot.val();
-        let usersList = [];
+        const data = snapshot.val();
+        let players = [];
 
-        Object.keys(allData).forEach(key => {
-            const user = allData[key];
-            usersList.push({
-                id: key,
-                refs: user.referrals_count || 0,
+        Object.keys(data).forEach(uid => {
+            const user = data[uid];
+            players.push({
+                id: uid,
+                referrals: user.referrals_count || 0,
                 chickens: user.chickens_list ? user.chickens_list.length : 0
             });
         });
 
-        // Referallar soni bo'yicha saralash
-        usersList.sort((a, b) => b.refs - a.refs);
+        // Sort by referrals, then by chicken count
+        players.sort((a, b) => b.referrals - a.referrals || b.chickens - a.chickens);
 
-        const top100 = usersList.slice(0, 100);
-        statusMsg.style.display = 'none';
-        podium.style.display = 'flex';
-        container.innerHTML = '';
+        const top100 = players.slice(0, 100);
 
-        // Top 3 ni shohsupaga joylash
-        for(let i=0; i<3; i++) {
-            if(top100[i]) {
-                const el = document.getElementById(`p-${i+1}`);
-                el.querySelector('.podium-id').innerText = `ID: ${top100[i].id}`;
-                el.querySelector('.podium-count').innerText = `${top100[i].refs} referal`;
+        loadingEl.style.display = 'none';
+        podiumEl.style.display = 'flex';
+        listContainer.innerHTML = '';
+
+        // Render Top 3 Podium
+        for (let i = 0; i < 3; i++) {
+            const p = top100[i];
+            const card = document.getElementById(`rank-${i + 1}`);
+            if (p) {
+                card.querySelector('.uid').innerText = `ID: ${p.id}`;
+                card.querySelector('.stats').innerHTML = `👥 ${p.referrals} Refs<br>🐔 ${p.chickens} Chickens`;
+            } else {
+                card.style.visibility = 'hidden';
             }
         }
 
-        // 4-o'rindan boshlab ro'yxatga chiqarish
-        top100.slice(3).forEach((user, index) => {
+        // Render remaining list (from 4th place)
+        top100.slice(3).forEach((p, index) => {
             const item = document.createElement('div');
-            item.className = 'ranking-item';
-            
+            item.className = 'list-item';
             item.innerHTML = `
-                <div class="rank-num">${index + 4}</div>
-                <div class="user-info">
-                    <div class="user-id">ID: ${user.id}</div>
-                    <div class="user-stats">🐔 ${user.chickens} chicken</div>
+                <div class="item-rank">#${index + 4}</div>
+                <div class="item-info">
+                    <div class="item-uid">ID: ${p.id}</div>
+                    <div class="item-sub">🐔 ${p.chickens} Chickens owned</div>
                 </div>
-                <div class="score-box">
-                    ${user.refs} ref
-                </div>
+                <div class="item-refs">${p.referrals} Refs</div>
             `;
-            container.appendChild(item);
+            listContainer.appendChild(item);
         });
 
-    } catch (error) {
-        console.error(error);
-        statusMsg.classList.add('error-msg');
-        statusMsg.innerText = "Xatolik: " + error.message;
+    } catch (err) {
+        console.error(err);
+        loadingEl.innerHTML = `<span style="color:red">Error loading data. Check your connection.</span>`;
     }
 }
 
-fetchRanking();
+initRanking();

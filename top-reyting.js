@@ -1,72 +1,71 @@
 import { db, ref, get } from './firebase.js';
 
-const tg = window.Telegram.WebApp;
+const statusMsg = document.getElementById('status-msg');
+const container = document.getElementById('ranking-container');
+const podium = document.getElementById('podium-container');
 
-async function loadRanking() {
-    const rankingContainer = document.getElementById('ranking-container');
-    const loadingText = document.getElementById('loading');
-    
+async function fetchRanking() {
     try {
-        // Ma'lumotlarni bazadan olish
         const usersRef = ref(db, 'users');
         const snapshot = await get(usersRef);
 
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            
-            // Obyektni massivga o'tkazish
-            let usersArray = [];
-            for (let id in data) {
-                usersArray.push({
-                    id: id,
-                    referrals_count: data[id].referrals_count || 0,
-                    chickens_count: data[id].chickens_list ? data[id].chickens_list.length : 0
-                });
-            }
-
-            // Referallar bo'yicha saralash
-            usersArray.sort((a, b) => b.referrals_count - a.referrals_count);
-
-            // Top 100
-            const top100 = usersArray.slice(0, 100);
-
-            // Ekranni tozalash
-            loadingText.style.display = 'none';
-            rankingContainer.innerHTML = '';
-
-            top100.forEach((user, index) => {
-                const rank = index + 1;
-                let rankClass = '';
-                let medal = '';
-
-                if (rank === 1) { rankClass = 'rank-1'; medal = '🥇'; }
-                else if (rank === 2) { rankClass = 'rank-2'; medal = '🥈'; }
-                else if (rank === 3) { rankClass = 'rank-3'; medal = '🥉'; }
-
-                const item = document.createElement('div');
-                item.className = `ranking-item ${rankClass}`;
-                
-                item.innerHTML = `
-                    <div class="rank-number">${medal || rank}</div>
-                    <div class="user-details">
-                        <div class="user-id">ID: ${user.id}</div>
-                        <div class="user-stats">
-                            <span class="stat-item">👥 ${user.referrals_count} ref</span>
-                            <span class="stat-item">🐔 ${user.chickens_count} ta</span>
-                        </div>
-                    </div>
-                `;
-                rankingContainer.appendChild(item);
-            });
-        } else {
-            loadingText.innerText = "Hozircha foydalanuvchilar yo'q.";
+        if (!snapshot.exists()) {
+            statusMsg.innerText = "No data yet..";
+            return;
         }
+
+        const allData = snapshot.val();
+        let usersList = [];
+
+        Object.keys(allData).forEach(key => {
+            const user = allData[key];
+            usersList.push({
+                id: key,
+                refs: user.referrals_count || 0,
+                chickens: user.chickens_list ? user.chickens_list.length : 0
+            });
+        });
+
+        // Referallar soni bo'yicha saralash
+        usersList.sort((a, b) => b.refs - a.refs);
+
+        const top100 = usersList.slice(0, 100);
+        statusMsg.style.display = 'none';
+        podium.style.display = 'flex';
+        container.innerHTML = '';
+
+        // Top 3 ni shohsupaga joylash
+        for(let i=0; i<3; i++) {
+            if(top100[i]) {
+                const el = document.getElementById(`p-${i+1}`);
+                el.querySelector('.podium-id').innerText = `ID: ${top100[i].id}`;
+                el.querySelector('.podium-count').innerText = `${top100[i].refs} referal`;
+            }
+        }
+
+        // 4-o'rindan boshlab ro'yxatga chiqarish
+        top100.slice(3).forEach((user, index) => {
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            
+            item.innerHTML = `
+                <div class="rank-num">${index + 4}</div>
+                <div class="user-info">
+                    <div class="user-id">ID: ${user.id}</div>
+                    <div class="user-stats">🐔 ${user.chickens} chicken</div>
+                </div>
+                <div class="score-box">
+                    ${user.refs} ref
+                </div>
+            `;
+            container.appendChild(item);
+        });
+
     } catch (error) {
-        console.error("Xatolik:", error);
-        loadingText.innerHTML = `<span style="color: red;">Xatolik yuz berdi: ${error.message}</span>`;
+        console.error(error);
+        statusMsg.classList.add('error-msg');
+        statusMsg.innerText = "Xatolik: " + error.message;
     }
 }
 
-// Ishga tushirish
-loadRanking();
-tg.expand();
+fetchRanking();

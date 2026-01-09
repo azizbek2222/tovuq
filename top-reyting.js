@@ -7,26 +7,30 @@ async function loadRanking() {
     const loadingText = document.getElementById('loading');
     
     try {
+        // Ma'lumotlarni bazadan olish
         const usersRef = ref(db, 'users');
         const snapshot = await get(usersRef);
 
         if (snapshot.exists()) {
             const data = snapshot.val();
-            // Obyektni massivga o'tkazamiz
-            let usersArray = Object.keys(data).map(key => {
-                return {
-                    id: key,
-                    referrals_count: data[key].referrals_count || 0,
-                    chickens_count: data[key].chickens_list ? data[key].chickens_list.length : 0
-                };
-            });
+            
+            // Obyektni massivga o'tkazish
+            let usersArray = [];
+            for (let id in data) {
+                usersArray.push({
+                    id: id,
+                    referrals_count: data[id].referrals_count || 0,
+                    chickens_count: data[id].chickens_list ? data[id].chickens_list.length : 0
+                });
+            }
 
-            // Referallar soni bo'yicha saralash (kamayish tartibida)
+            // Referallar bo'yicha saralash
             usersArray.sort((a, b) => b.referrals_count - a.referrals_count);
 
-            // Faqat top 100 tasini olamiz
+            // Top 100
             const top100 = usersArray.slice(0, 100);
 
+            // Ekranni tozalash
             loadingText.style.display = 'none';
             rankingContainer.innerHTML = '';
 
@@ -55,14 +59,14 @@ async function loadRanking() {
                 rankingContainer.appendChild(item);
             });
         } else {
-            loadingText.innerText = "Hozircha ma'lumot yo'q.";
+            loadingText.innerText = "Hozircha foydalanuvchilar yo'q.";
         }
     } catch (error) {
-        console.error("Reyting yuklashda xato:", error);
-        loadingText.innerText = "Ma'lumot yuklashda xatolik yuz berdi.";
+        console.error("Xatolik:", error);
+        loadingText.innerHTML = `<span style="color: red;">Xatolik yuz berdi: ${error.message}</span>`;
     }
 }
 
-// Ilovani ochishda reytingni yuklash
+// Ishga tushirish
 loadRanking();
 tg.expand();

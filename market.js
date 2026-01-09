@@ -136,7 +136,7 @@ async function buyChickenBtn() {
             // Tovuq qo'shish
             await addChicken(false);
 
-            tg.showAlert(`Muvaffaqiyatli! Tovuq sotib olindi. Balans: ${newBalance.toFixed(5)} USDT`);
+            tg.showAlert(`Successful! Chicken purchased. Balance: ${newBalance.toFixed(5)} USDT`);
         } else {
             tg.showAlert("There are not enough funds in your account! (Required: 0.0003 USDT))");
         }

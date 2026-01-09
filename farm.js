@@ -7,6 +7,9 @@ const INCOME_PER_CHICKEN = 0.00002;
 const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 soat
 const LIFESPAN_MS = 100 * 24 * 60 * 60 * 1000; // 100 kun
 
+// Yig'ish jarayoni ketayotganini tekshirish uchun bayroq
+let isCollecting = false;
+
 async function renderFarm() {
     const userRef = ref(db, 'users/' + userId);
     const snapshot = await get(userRef);
@@ -36,7 +39,6 @@ async function renderFarm() {
         const timePassed = now - lastCol;
         const canCollect = timePassed >= COOLDOWN_MS;
         
-        // Qolgan umrni hisoblash
         const lifeUsed = now - chicken.created;
         const lifeRemaining = LIFESPAN_MS - lifeUsed;
         const daysLeft = Math.floor(lifeRemaining / (24 * 60 * 60 * 1000));
@@ -46,7 +48,8 @@ async function renderFarm() {
         
         let actionContent = '';
         if (canCollect) {
-            actionContent = `<button class="collect-mini-btn" data-index="${index}">Yig'ish</button>`;
+            // Tugmani ID bilan yaratamizki, keyin uni oson o'chiraylik
+            actionContent = `<button class="collect-mini-btn" id="btn-${index}" data-index="${index}">Yig'ish</button>`;
         } else {
             const remaining = COOLDOWN_MS - timePassed;
             actionContent = `<span class="timer-text" data-remain="${remaining}">${formatTime(remaining)}</span>`;
@@ -55,49 +58,89 @@ async function renderFarm() {
         item.innerHTML = `
             <div class="chicken-info">
                 <span>🐔 Chicken #${index + 1}</span>
-                <span class="life-text">Lifespan: ${daysLeft} days left</span>
+                <span class="life-text">Lifespan: ${daysLeft > 0 ? daysLeft : 0} kun qoldi</span>
             </div>
             ${actionContent}
         `;
         container.appendChild(item);
     });
 
+    // Tugmalarga event listener qo'shish
     document.querySelectorAll('.collect-mini-btn').forEach(btn => {
-        btn.onclick = () => collectFromChicken(parseInt(btn.dataset.index));
+        btn.onclick = (e) => {
+            const index = parseInt(e.target.dataset.index);
+            collectFromChicken(index, e.target);
+        };
     });
 }
 
-async function collectFromChicken(index) {
-    const userRef = ref(db, 'users/' + userId);
-    const snapshot = await get(userRef);
-    let data = snapshot.val();
-    
-    if (!data.chickens_list[index]) return;
+async function collectFromChicken(index, buttonElement) {
+    // Agar jarayon ketayotgan bo'lsa yoki tugma o'chirilgan bo'lsa, funksiyani to'xtatamiz
+    if (isCollecting || (buttonElement && buttonElement.disabled)) return;
 
-    data.balance = (parseFloat(data.balance) || 0) + INCOME_PER_CHICKEN;
-    data.chickens_list[index].last_collected = Date.now();
+    try {
+        isCollecting = true; // Jarayon boshlandi
+        if (buttonElement) {
+            buttonElement.disabled = true; // Tugmani darhol o'chirish
+            buttonElement.innerText = "Kuting...";
+        }
 
-    await update(userRef, {
-        balance: data.balance,
-        chickens_list: data.chickens_list
-    });
+        const userRef = ref(db, 'users/' + userId);
+        const snapshot = await get(userRef);
+        let data = snapshot.val();
+        
+        if (!data || !data.chickens_list || !data.chickens_list[index]) {
+            throw new Error("Ma'lumot topilmadi");
+        }
 
-    tg.showAlert(`Daromad yig'ildi: ${INCOME_PER_CHICKEN} USDT`);
-    renderFarm();
+        const now = Date.now();
+        const lastCol = data.chickens_list[index].last_collected || 0;
+
+        // Baza darajasida vaqtni qayta tekshirish (xavfsizlik uchun)
+        if (now - lastCol < COOLDOWN_MS) {
+            tg.showAlert("Vaqt hali kelmadi!");
+            renderFarm();
+            return;
+        }
+
+        const newBalance = (parseFloat(data.balance) || 0) + INCOME_PER_CHICKEN;
+        data.chickens_list[index].last_collected = now;
+
+        // Bazani yangilash
+        await update(userRef, {
+            balance: newBalance,
+            chickens_list: data.chickens_list
+        });
+
+        tg.showAlert(`Daromad yig'ildi: ${INCOME_PER_CHICKEN} USDT`);
+        
+    } catch (error) {
+        console.error("Xatolik:", error);
+        tg.showAlert("Internet aloqasi sust, qaytadan urunib ko'ring.");
+    } finally {
+        isCollecting = false; // Jarayon tugadi
+        renderFarm(); // Ekranni qayta chizish
+    }
 }
 
 function formatTime(ms) {
+    if (ms <= 0) return "00:00:00";
     const seconds = Math.floor((ms / 1000) % 60);
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+// Timer yangilanishi
 setInterval(() => {
     document.querySelectorAll('.timer-text').forEach(el => {
         let remain = parseInt(el.dataset.remain) - 1000;
         if (remain <= 0) {
-            renderFarm();
+            // Faqat bitta taymer tugasa ham hammasini render qilmaslik uchun tekshiruv
+            if (!el.dataset.reloading) {
+                el.dataset.reloading = "true";
+                renderFarm();
+            }
         } else {
             el.dataset.remain = remain;
             el.innerText = formatTime(remain);

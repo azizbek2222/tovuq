@@ -6,100 +6,109 @@
     <title>Chicken Battle Royale</title>
     <link rel="stylesheet" href="home.css">
     <style>
-        body { background: #2e7d32; color: white; font-family: 'Arial', sans-serif; }
-        .battle-container { 
-            padding: 20px; 
-            background: rgba(0,0,0,0.3); 
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        body { background: #2e7d32; color: white; font-family: 'Arial', sans-serif; overflow: hidden; }
+        .battle-container { padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* HP Panellari */
+        .health-section {
+            width: 100%;
+            display: none; /* Faqat jangda ko'rinadi */
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
+        .hp-container { width: 45%; background: #444; border-radius: 10px; border: 2px solid #fff; height: 20px; overflow: hidden; }
+        .hp-bar { width: 100%; height: 100%; background: #ff3d00; transition: width 0.2s; }
+        .hp-text { font-size: 12px; font-weight: bold; text-align: center; margin-top: 2px; }
+
         .arena {
-            width: 95%;
-            height: 300px;
+            width: 100%;
+            height: 350px;
             background: url('https://img.freepik.com/free-vector/farm-landscape-with-green-field-trees_107791-2309.jpg');
             background-size: cover;
-            border: 8px solid #5d4037;
-            border-radius: 25px;
+            border: 6px solid #5d4037;
+            border-radius: 20px;
             position: relative;
-            margin: 20px 0;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            display: none; /* Faqat jang boshlanganda */
+            margin: 10px 0;
+            display: none;
+            touch-action: manipulation;
         }
+        
         .chicken {
-            width: 70px;
-            font-size: 60px;
+            width: 100px;
+            height: 100px;
             position: absolute;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(2px 4px 6px black);
+            background: url('https://pngimg.com/d/chicken_PNG12543.png'); /* Haqiqiy butun tovuq rasmi */
+            background-size: contain;
+            background-repeat: no-repeat;
+            transition: all 0.1s linear;
         }
-        #chicken-left { left: 10%; bottom: 20%; transform: scaleX(-1); }
-        #chicken-right { right: 10%; bottom: 20%; }
+        #chicken-left { left: 5%; bottom: 20%; transform: scaleX(-1); }
+        #chicken-right { right: 5%; bottom: 20%; }
         
-        /* Jang animatsiyalari */
-        .attack-left { animation: hitLeft 0.5s infinite alternate; }
-        .attack-right { animation: hitRight 0.5s infinite alternate; }
-        
-        @keyframes hitLeft {
-            0% { transform: translateX(0) scaleX(-1); }
-            100% { transform: translateX(50px) translateY(-20px) scaleX(-1); }
-        }
-        @keyframes hitRight {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50px) translateY(-20px); }
+        .tap-zone {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10;
         }
 
-        .battle-btns { width: 100%; display: flex; flex-direction: column; gap: 15px; }
         .btn-battle {
-            padding: 18px;
-            border-radius: 15px;
-            border: 4px solid #3e2723;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
             font-size: 18px;
             font-weight: bold;
             color: white;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 5px 0 #3e2723;
+            margin-bottom: 10px;
+            box-shadow: 0 4px #222;
         }
-        .btn-battle:active { transform: translateY(3px); box-shadow: 0 2px 0 #3e2723; }
         .create-btn { background: #4caf50; }
         .random-btn { background: #ff9800; }
         
-        #timer-display {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffeb3b;
-            text-shadow: 2px 2px 4px #000;
+        #instruction {
+            font-size: 20px;
+            color: #ffff00;
+            text-shadow: 2px 2px #000;
+            text-align: center;
             display: none;
+            animation: blink 0.5s infinite;
         }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
     <div class="battle-container">
-        <h2>⚔️ CHICKEN ARENA ⚔️</h2>
-        <div class="balance-card">
-            <span id="balance">0.00000</span> USDT
+        <div class="balance-card" style="background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;">
+            💰 <span id="balance">0.00000</span> USDT
         </div>
-        
-        <p id="status-text" style="margin: 20px 0; font-size: 18px; text-align: center;">Ready for the fight?</p>
-        <div id="timer-display">30s</div>
+
+        <div class="health-section" id="hp-section">
+            <div>
+                <div class="hp-container"><div id="hp-left" class="hp-bar"></div></div>
+                <div class="hp-text">YOU</div>
+            </div>
+            <div style="text-align: right;">
+                <div class="hp-container"><div id="hp-right" class="hp-bar"></div></div>
+                <div class="hp-text">ENEMY</div>
+            </div>
+        </div>
+
+        <div id="status-text" style="margin: 15px 0; font-weight: bold;">Ready to rumble?</div>
+        <div id="instruction">TAP FAST! 👆</div>
 
         <div id="arena" class="arena">
-            <div id="chicken-left" class="chicken">🐓</div>
-            <div id="chicken-right" class="chicken">🐔</div>
+            <div id="chicken-left" class="chicken"></div>
+            <div id="chicken-right" class="chicken"></div>
+            <div id="tap-zone" class="tap-zone"></div>
         </div>
 
         <div class="battle-btns" id="action-btns">
-            <button class="btn-battle create-btn" id="createBattleBtn">➕ Create New Battle</button>
-            <button class="btn-battle random-btn" id="randomBattleBtn">🎲 Join Random Battle</button>
+            <button class="btn-battle create-btn" id="createBattleBtn">CREATE BATTLE</button>
+            <button class="btn-battle random-btn" id="randomBattleBtn">JOIN RANDOM</button>
+            <button onclick="location.href='profile.html'" style="background:none; color:white; border:none; text-decoration:underline; width:100%">Exit</button>
         </div>
-        
-        <button onclick="location.href='profile.html'" id="backBtn" style="margin-top: 20px; background: none; border: none; color: white; text-decoration: underline;">Back to Profile</button>
     </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="module" src="battle.js"></script>
 </body>
 </html>

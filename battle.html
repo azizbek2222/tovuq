@@ -6,106 +6,110 @@
     <title>Chicken Battle Royale</title>
     <link rel="stylesheet" href="home.css">
     <style>
-        body { background: #2e7d32; color: white; font-family: 'Arial', sans-serif; overflow: hidden; }
-        .battle-container { padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        body { background: #1b5e20; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        .battle-container { padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* HP Panellari */
+        .balance-card {
+            background: rgba(0,0,0,0.6);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 2px solid #ffd700;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
         .health-section {
             width: 100%;
-            display: none; /* Faqat jangda ko'rinadi */
+            display: none;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
-        .hp-container { width: 45%; background: #444; border-radius: 10px; border: 2px solid #fff; height: 20px; overflow: hidden; }
-        .hp-bar { width: 100%; height: 100%; background: #ff3d00; transition: width 0.2s; }
-        .hp-text { font-size: 12px; font-weight: bold; text-align: center; margin-top: 2px; }
+        .hp-container { width: 45%; background: #333; border: 2px solid #fff; height: 22px; border-radius: 11px; overflow: hidden; position: relative; }
+        .hp-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff1744, #ff5252); transition: width 0.3s cubic-bezier(0.1, 0.7, 1.0, 0.1); }
+        .hp-text { position: absolute; width: 100%; text-align: center; font-size: 12px; font-weight: bold; line-height: 22px; color: white; text-shadow: 1px 1px 2px #000; }
 
         .arena {
             width: 100%;
             height: 350px;
-            background: url('https://img.freepik.com/free-vector/farm-landscape-with-green-field-trees_107791-2309.jpg');
-            background-size: cover;
-            border: 6px solid #5d4037;
-            border-radius: 20px;
+            background: url('https://img.freepik.com/free-vector/farm-landscape-with-green-field-trees_107791-2309.jpg') center/cover;
+            border: 8px solid #3e2723;
+            border-radius: 25px;
             position: relative;
-            margin: 10px 0;
+            margin-bottom: 20px;
             display: none;
-            touch-action: manipulation;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         
         .chicken {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             position: absolute;
-            background: url('https://pngimg.com/d/chicken_PNG12543.png'); /* Haqiqiy butun tovuq rasmi */
-            background-size: contain;
-            background-repeat: no-repeat;
-            transition: all 0.1s linear;
+            background: url('https://pngimg.com/d/chicken_PNG12543.png') no-repeat center/contain;
+            filter: drop-shadow(2px 8px 10px rgba(0,0,0,0.6));
         }
-        #chicken-left { left: 5%; bottom: 20%; transform: scaleX(-1); }
-        #chicken-right { right: 5%; bottom: 20%; }
+        #chicken-left { left: 5%; bottom: 15%; transform: scaleX(-1); }
+        #chicken-right { right: 5%; bottom: 15%; }
         
-        .tap-zone {
+        .tap-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10;
+            z-index: 999; display: none;
         }
 
         .btn-battle {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
+            width: 90%;
+            padding: 18px;
+            border-radius: 15px;
             border: none;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 10px;
-            box-shadow: 0 4px #222;
-        }
-        .create-btn { background: #4caf50; }
-        .random-btn { background: #ff9800; }
-        
-        #instruction {
             font-size: 20px;
-            color: #ffff00;
-            text-shadow: 2px 2px #000;
-            text-align: center;
-            display: none;
-            animation: blink 0.5s infinite;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px rgba(0,0,0,0.3);
         }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .create-btn { background: #2e7d32; }
+        .random-btn { background: #ef6c00; }
+        
+        #status-text { font-size: 18px; margin: 15px 0; font-weight: 600; text-align: center; }
+        #instruction {
+            font-size: 28px;
+            color: #ffeb3b;
+            text-shadow: 3px 3px 5px #000;
+            font-weight: 900;
+            display: none;
+            margin-bottom: 10px;
+            animation: bounce 0.5s infinite;
+        }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     </style>
 </head>
 <body>
     <div class="battle-container">
-        <div class="balance-card" style="background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;">
+        <div class="balance-card">
             💰 <span id="balance">0.00000</span> USDT
         </div>
 
         <div class="health-section" id="hp-section">
-            <div>
-                <div class="hp-container"><div id="hp-left" class="hp-bar"></div></div>
-                <div class="hp-text">YOU</div>
-            </div>
-            <div style="text-align: right;">
-                <div class="hp-container"><div id="hp-right" class="hp-bar"></div></div>
-                <div class="hp-text">ENEMY</div>
-            </div>
+            <div class="hp-container"><div id="hp-left" class="hp-bar"></div><div class="hp-text">YOU</div></div>
+            <div class="hp-container"><div id="hp-right" class="hp-bar"></div><div class="hp-text">RIVAL</div></div>
         </div>
 
-        <div id="status-text" style="margin: 15px 0; font-weight: bold;">Ready to rumble?</div>
-        <div id="instruction">TAP FAST! 👆</div>
+        <div id="status-text">ARE YOU READY?</div>
+        <div id="instruction">TAP TO HIT! 👆</div>
 
         <div id="arena" class="arena">
             <div id="chicken-left" class="chicken"></div>
             <div id="chicken-right" class="chicken"></div>
-            <div id="tap-zone" class="tap-zone"></div>
+            <div id="tap-overlay" class="tap-overlay"></div>
         </div>
 
-        <div class="battle-btns" id="action-btns">
+        <div id="action-btns" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <button class="btn-battle create-btn" id="createBattleBtn">CREATE BATTLE</button>
-            <button class="btn-battle random-btn" id="randomBattleBtn">JOIN RANDOM</button>
-            <button onclick="location.href='profile.html'" style="background:none; color:white; border:none; text-decoration:underline; width:100%">Exit</button>
+            <button class="btn-battle random-btn" id="randomBattleBtn">RANDOM JOIN</button>
+            <button onclick="location.href='profile.html'" style="background:none; color:#bbb; border:none; text-decoration:underline; margin-top:10px;">Exit Arena</button>
         </div>
     </div>
 

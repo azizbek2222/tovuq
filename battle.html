@@ -11,50 +11,50 @@
         
         .balance-card {
             background: rgba(0,0,0,0.7);
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 10px 25px;
+            border-radius: 25px;
             border: 2px solid #ffd700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 18px;
             font-weight: bold;
         }
 
         .health-section {
             width: 100%;
-            display: none;
+            display: none; /* Only during fight */
             justify-content: space-between;
             margin-bottom: 15px;
         }
-        .hp-box { width: 45%; }
-        .hp-container { width: 100%; background: #333; border: 2px solid #fff; height: 20px; border-radius: 10px; overflow: hidden; }
-        .hp-bar { width: 100%; height: 100%; background: #ff1744; transition: width 0.2s; }
-        .hp-label { font-size: 12px; text-align: center; margin-top: 5px; font-weight: bold; }
+        .hp-container { width: 45%; background: #333; border: 2px solid #fff; height: 22px; border-radius: 11px; overflow: hidden; position: relative; }
+        .hp-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #f44336, #ff5252); transition: width 0.2s; }
+        .hp-text { position: absolute; width: 100%; text-align: center; font-size: 11px; line-height: 22px; font-weight: bold; }
 
         .arena {
             width: 100%;
-            height: 320px;
+            height: 350px;
             background: url('https://img.freepik.com/free-vector/farm-landscape-with-green-field-trees_107791-2309.jpg') center/cover;
-            border: 6px solid #3e2723;
+            border: 8px solid #3e2723;
             border-radius: 25px;
             position: relative;
             margin-bottom: 20px;
             display: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
         
         .chicken {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             position: absolute;
             background: url('https://pngimg.com/d/chicken_PNG12543.png') no-repeat center/contain;
+            filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.4));
         }
         #chicken-left { left: 5%; bottom: 15%; transform: scaleX(-1); }
         #chicken-right { right: 5%; bottom: 15%; }
         
-        .tap-zone {
+        .tap-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1000; display: none;
+            z-index: 9999; display: none;
         }
 
         .btn-battle {
@@ -63,25 +63,26 @@
             border-radius: 15px;
             border: none;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 900;
             color: white;
-            margin-bottom: 10px;
-            cursor: pointer;
+            margin-bottom: 12px;
             text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 5px #1b5e20;
         }
-        .create-btn { background: #4caf50; box-shadow: 0 5px #2e7d32; }
-        .random-btn { background: #ff9800; box-shadow: 0 5px #e65100; }
+        .create-btn { background: #4caf50; }
+        .random-btn { background: #ff9800; }
         
         #instruction {
-            font-size: 24px;
-            color: #ffff00;
-            text-shadow: 2px 2px #000;
+            font-size: 26px;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px #000;
             font-weight: 900;
             display: none;
             margin-bottom: 10px;
             animation: pulse 0.5s infinite;
         }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -91,29 +92,23 @@
         </div>
 
         <div class="health-section" id="hp-section">
-            <div class="hp-box">
-                <div class="hp-container"><div id="hp-left" class="hp-bar"></div></div>
-                <div class="hp-label">YOU</div>
-            </div>
-            <div class="hp-box">
-                <div class="hp-container"><div id="hp-right" class="hp-bar"></div></div>
-                <div class="hp-label">RIVAL</div>
-            </div>
+            <div class="hp-container"><div id="hp-left" class="hp-bar"></div><div class="hp-text">YOU</div></div>
+            <div class="hp-container"><div id="hp-right" class="hp-bar"></div><div class="hp-text">ENEMY</div></div>
         </div>
 
-        <div id="status-text" style="font-size: 18px; margin: 10px 0;">ARE YOU READY?</div>
-        <div id="instruction">TAP FAST! 👆</div>
+        <div id="status-text" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">READY FOR BATTLE?</div>
+        <div id="instruction">TAP TO ATTACK! 👆</div>
 
         <div id="arena" class="arena">
             <div id="chicken-left" class="chicken"></div>
             <div id="chicken-right" class="chicken"></div>
-            <div id="tap-zone" class="tap-zone"></div>
+            <div id="tap-overlay" class="tap-overlay"></div>
         </div>
 
         <div id="action-btns" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <button class="btn-battle create-btn" id="createBattleBtn">CREATE BATTLE</button>
             <button class="btn-battle random-btn" id="randomBattleBtn">JOIN RANDOM</button>
-            <button onclick="location.href='profile.html'" style="background:none; color:#ccc; border:none; text-decoration:underline; margin-top:10px;">Exit</button>
+            <button onclick="location.href='profile.html'" style="background:none; color:#ccc; border:none; text-decoration:underline; margin-top:10px;">Exit Arena</button>
         </div>
     </div>
 

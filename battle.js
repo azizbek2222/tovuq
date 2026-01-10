@@ -4,76 +4,68 @@ import { onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-data
 const tg = window.Telegram.WebApp;
 const userId = tg.initDataUnsafe?.user?.id || "test_user";
 
-// Elementlarni olish
 const balanceEl = document.getElementById('balance');
 const statusText = document.getElementById('status-text');
 const actionBtns = document.getElementById('action-btns');
 const hpSection = document.getElementById('hp-section');
 const arena = document.getElementById('arena');
 const instruction = document.getElementById('instruction');
-const tapZone = document.getElementById('tap-zone');
+const tapOverlay = document.getElementById('tap-overlay');
 
 let battleId = null;
 let role = ""; 
 let isBattleRunning = false;
 
-// 1. Balansni real vaqtda yuklash (onValue orqali)
-const userRef = ref(db, 'users/' + userId);
-onValue(userRef, (snap) => {
+// 1. BALANSNI REAL-TIME YUKLASH (XATOLIK TUZATILDI)
+onValue(ref(db, 'users/' + userId), (snap) => {
     if (snap.exists()) {
-        const userData = snap.val();
-        balanceEl.innerText = parseFloat(userData.balance || 0).toFixed(5);
+        const val = snap.val();
+        balanceEl.innerText = parseFloat(val.balance || 0).toFixed(5);
     }
 });
 
-// 2. Tovuq borligini tekshirish
-async function checkChickens() {
-    const snap = await get(userRef);
+async function canFight() {
+    const snap = await get(ref(db, 'users/' + userId));
     const data = snap.val();
     if (!data?.chickens_list || data.chickens_list.length < 1) {
-        tg.showAlert("❌ No chickens! Buy one in the Market first.");
+        tg.showAlert("❌ You need at least 1 chicken! Visit the Market.");
         return false;
     }
     return true;
 }
 
-// 3. Jang yaratish
+// 2. JANG YARATISH
 document.getElementById('createBattleBtn').onclick = async () => {
-    if (!(await checkChickens())) return;
+    if (!(await canFight())) return;
 
     role = "creator";
     battleId = userId.toString();
     actionBtns.style.display = 'none';
-    statusText.innerText = "WAITING FOR RIVAL...";
+    statusText.innerText = "WAITING FOR OPPONENT...";
 
     await set(ref(db, 'active_battles/' + battleId), {
         creator: userId,
         status: 'waiting',
         creatorTap: 0,
-        opponentTap: 0
+        opponentTap: 0,
+        timestamp: Date.now()
     });
 
-    // Raqib kelishini kutish
-    const bRef = ref(db, 'active_battles/' + battleId);
-    onValue(bRef, (snap) => {
-        const bData = snap.val();
-        if (bData?.status === 'fighting' && !isBattleRunning) {
-            startBattleProcess(bData);
+    onValue(ref(db, 'active_battles/' + battleId), (snap) => {
+        const data = snap.val();
+        if (data?.status === 'fighting' && !isBattleRunning) {
+            startTheFight(data);
         }
     });
 };
 
-// 4. Jangga qo'shilish
+// 3. JANGGA QO'SHILISH
 document.getElementById('randomBattleBtn').onclick = async () => {
-    if (!(await checkChickens())) return;
+    if (!(await canFight())) return;
 
-    const battlesSnap = await get(ref(db, 'active_battles'));
-    const allBattles = battlesSnap.val();
-    
-    let foundId = null;
-    if (allBattles) {
-        foundId = Object.keys(allBattles).find(id => allBattles[id].status === 'waiting' && id !== userId.toString());
-    }
+    const snap = await get(ref(db, 'active_battles'));
+    const all = snap.val();
+    const foundId = all ? Object.keys(all).find(id => all[id].status === 'waiting' && id !== userId.toString()) : null;
 
     if (foundId) {
         role = "opponent";
@@ -82,88 +74,80 @@ document.getElementById('randomBattleBtn').onclick = async () => {
             opponent: userId,
             status: 'fighting'
         });
-        // Listener ulaymiz
+        
         onValue(ref(db, 'active_battles/' + battleId), (snap) => {
-            const bData = snap.val();
-            if (bData?.status === 'fighting' && !isBattleRunning) {
-                startBattleProcess(bData);
+            const data = snap.val();
+            if (data?.status === 'fighting' && !isBattleRunning) {
+                startTheFight(data);
             }
         });
     } else {
-        tg.showAlert("No rooms available. Create your own!");
+        tg.showAlert("No active rooms. Create one!");
     }
 };
 
-// 5. Jang jarayoni
-function startBattleProcess() {
+// 4. JANG MEXANIKASI (TAP-TO-WIN)
+function startTheFight() {
     isBattleRunning = true;
     arena.style.display = 'block';
     hpSection.style.display = 'flex';
     instruction.style.display = 'block';
-    tapZone.style.display = 'block';
-    statusText.innerText = "FIGHT!";
+    tapOverlay.style.display = 'block';
+    statusText.innerText = "BATTLE IN PROGRESS!";
 
-    // Tap urish
-    tapZone.onclick = () => {
-        if (!isBattleRunning) return;
+    tapOverlay.onclick = () => {
         const tapKey = (role === "creator") ? 'creatorTap' : 'opponentTap';
-        const currentBattleRef = ref(db, 'active_battles/' + battleId);
-        
-        get(currentBattleRef).then(snap => {
-            const val = snap.val();
-            if (val) {
-                update(currentBattleRef, { [tapKey]: (val[tapKey] || 0) + 1 });
-            }
+        const battleRef = ref(db, 'active_battles/' + battleId);
+        get(battleRef).then(s => {
+            const d = s.val();
+            if (d) update(battleRef, { [tapKey]: (d[tapKey] || 0) + 1 });
         });
     };
 
-    // HP va harakatlarni kuzatish
     onValue(ref(db, 'active_battles/' + battleId), (snap) => {
-        const bData = snap.val();
-        if (!bData || !isBattleRunning) return;
+        const b = snap.val();
+        if (!b || !isBattleRunning) return;
 
-        const myTaps = (role === "creator") ? bData.creatorTap : bData.opponentTap;
-        const rivalTaps = (role === "creator") ? bData.opponentTap : bData.creatorTap;
+        const myTaps = (role === "creator") ? b.creatorTap : b.opponentTap;
+        const enemyTaps = (role === "creator") ? b.opponentTap : b.creatorTap;
 
-        const myHP = Math.max(0, 100 - (rivalTaps * 2.5)); // 40 ta tapda o'ladi
-        const rivalHP = Math.max(0, 100 - (myTaps * 2.5));
+        // Har bir tap 2.5% jon oladi
+        const myHP = Math.max(0, 100 - (enemyTaps * 2.5));
+        const enemyHP = Math.max(0, 100 - (myTaps * 2.5));
 
         document.getElementById('hp-left').style.width = myHP + "%";
-        document.getElementById('hp-right').style.width = rivalHP + "%";
+        document.getElementById('hp-right').style.width = enemyHP + "%";
 
-        // Tovuqlarni markazga siljitish
+        // Tovuqlar harakati
         document.getElementById('chicken-left').style.left = (5 + myTaps/2) + "%";
-        document.getElementById('chicken-right').style.right = (5 + rivalTaps/2) + "%";
+        document.getElementById('chicken-right').style.right = (5 + enemyTaps/2) + "%";
 
-        if (myHP <= 0 || rivalHP <= 0) {
+        if (myHP <= 0 || enemyHP <= 0) {
             isBattleRunning = false;
-            finishGame(myHP > 0);
+            concludeBattle(myHP > 0);
         }
     });
 }
 
-async function finishGame(isWin) {
-    tapZone.style.display = 'none';
-    instruction.style.display = 'none';
+async function concludeBattle(isWin) {
     statusText.innerHTML = isWin ? "<h2 style='color:gold'>VICTORY! 🏆</h2>" : "<h2 style='color:red'>DEFEAT! 💀</h2>";
+    tapOverlay.style.display = 'none';
+    instruction.style.display = 'none';
 
-    const snap = await get(userRef);
-    let chickens = snap.val().chickens_list || [];
+    const userRef = ref(db, 'users/' + userId);
+    const userSnap = await get(userRef);
+    let chickens = userSnap.val().chickens_list || [];
 
     if (isWin) {
         chickens.push({ id: Date.now(), created: Date.now(), source: 'battle' });
-        tg.showAlert("You won a new chicken!");
+        tg.showAlert("Victory! You won a chicken!");
     } else {
         chickens.pop();
-        tg.showAlert("You lost a chicken in battle!");
+        tg.showAlert("Defeat! You lost a chicken.");
     }
 
     await update(userRef, { chickens_list: chickens });
-    
-    // Yaratuvchi xonani tozalaydi
-    if (role === "creator") {
-        setTimeout(() => set(ref(db, 'active_battles/' + battleId), null), 3000);
-    }
+    if (role === "creator") setTimeout(() => set(ref(db, 'active_battles/' + battleId), null), 3000);
     
     setTimeout(() => location.href = 'profile.html', 5000);
 }

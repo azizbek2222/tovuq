@@ -6,55 +6,55 @@
     <title>Chicken Battle Royale</title>
     <link rel="stylesheet" href="home.css">
     <style>
-        body { background: #1b5e20; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        body { background: #1b5e20; color: white; font-family: 'Arial', sans-serif; overflow: hidden; }
         .battle-container { padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
         .balance-card {
-            background: rgba(0,0,0,0.6);
-            padding: 10px 25px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
             border: 2px solid #ffd700;
-            font-weight: bold;
             margin-bottom: 15px;
             font-size: 18px;
+            font-weight: bold;
         }
 
         .health-section {
             width: 100%;
             display: none;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        .hp-container { width: 45%; background: #333; border: 2px solid #fff; height: 22px; border-radius: 11px; overflow: hidden; position: relative; }
-        .hp-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff1744, #ff5252); transition: width 0.3s cubic-bezier(0.1, 0.7, 1.0, 0.1); }
-        .hp-text { position: absolute; width: 100%; text-align: center; font-size: 12px; font-weight: bold; line-height: 22px; color: white; text-shadow: 1px 1px 2px #000; }
+        .hp-box { width: 45%; }
+        .hp-container { width: 100%; background: #333; border: 2px solid #fff; height: 20px; border-radius: 10px; overflow: hidden; }
+        .hp-bar { width: 100%; height: 100%; background: #ff1744; transition: width 0.2s; }
+        .hp-label { font-size: 12px; text-align: center; margin-top: 5px; font-weight: bold; }
 
         .arena {
             width: 100%;
-            height: 350px;
+            height: 320px;
             background: url('https://img.freepik.com/free-vector/farm-landscape-with-green-field-trees_107791-2309.jpg') center/cover;
-            border: 8px solid #3e2723;
+            border: 6px solid #3e2723;
             border-radius: 25px;
             position: relative;
             margin-bottom: 20px;
             display: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
         
         .chicken {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             position: absolute;
             background: url('https://pngimg.com/d/chicken_PNG12543.png') no-repeat center/contain;
-            filter: drop-shadow(2px 8px 10px rgba(0,0,0,0.6));
         }
         #chicken-left { left: 5%; bottom: 15%; transform: scaleX(-1); }
         #chicken-right { right: 5%; bottom: 15%; }
         
-        .tap-overlay {
+        .tap-zone {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 999; display: none;
+            z-index: 1000; display: none;
         }
 
         .btn-battle {
@@ -62,28 +62,26 @@
             padding: 18px;
             border-radius: 15px;
             border: none;
-            font-size: 20px;
-            font-weight: 800;
+            font-size: 18px;
+            font-weight: bold;
             color: white;
-            margin-bottom: 12px;
-            text-transform: uppercase;
+            margin-bottom: 10px;
             cursor: pointer;
-            box-shadow: 0 6px rgba(0,0,0,0.3);
+            text-transform: uppercase;
         }
-        .create-btn { background: #2e7d32; }
-        .random-btn { background: #ef6c00; }
+        .create-btn { background: #4caf50; box-shadow: 0 5px #2e7d32; }
+        .random-btn { background: #ff9800; box-shadow: 0 5px #e65100; }
         
-        #status-text { font-size: 18px; margin: 15px 0; font-weight: 600; text-align: center; }
         #instruction {
-            font-size: 28px;
-            color: #ffeb3b;
-            text-shadow: 3px 3px 5px #000;
+            font-size: 24px;
+            color: #ffff00;
+            text-shadow: 2px 2px #000;
             font-weight: 900;
             display: none;
             margin-bottom: 10px;
-            animation: bounce 0.5s infinite;
+            animation: pulse 0.5s infinite;
         }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -93,23 +91,29 @@
         </div>
 
         <div class="health-section" id="hp-section">
-            <div class="hp-container"><div id="hp-left" class="hp-bar"></div><div class="hp-text">YOU</div></div>
-            <div class="hp-container"><div id="hp-right" class="hp-bar"></div><div class="hp-text">RIVAL</div></div>
+            <div class="hp-box">
+                <div class="hp-container"><div id="hp-left" class="hp-bar"></div></div>
+                <div class="hp-label">YOU</div>
+            </div>
+            <div class="hp-box">
+                <div class="hp-container"><div id="hp-right" class="hp-bar"></div></div>
+                <div class="hp-label">RIVAL</div>
+            </div>
         </div>
 
-        <div id="status-text">ARE YOU READY?</div>
-        <div id="instruction">TAP TO HIT! 👆</div>
+        <div id="status-text" style="font-size: 18px; margin: 10px 0;">ARE YOU READY?</div>
+        <div id="instruction">TAP FAST! 👆</div>
 
         <div id="arena" class="arena">
             <div id="chicken-left" class="chicken"></div>
             <div id="chicken-right" class="chicken"></div>
-            <div id="tap-overlay" class="tap-overlay"></div>
+            <div id="tap-zone" class="tap-zone"></div>
         </div>
 
         <div id="action-btns" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <button class="btn-battle create-btn" id="createBattleBtn">CREATE BATTLE</button>
-            <button class="btn-battle random-btn" id="randomBattleBtn">RANDOM JOIN</button>
-            <button onclick="location.href='profile.html'" style="background:none; color:#bbb; border:none; text-decoration:underline; margin-top:10px;">Exit Arena</button>
+            <button class="btn-battle random-btn" id="randomBattleBtn">JOIN RANDOM</button>
+            <button onclick="location.href='profile.html'" style="background:none; color:#ccc; border:none; text-decoration:underline; margin-top:10px;">Exit</button>
         </div>
     </div>
 

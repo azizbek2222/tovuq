@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken Battle Arena</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        .battle-container { text-align: center; padding: 20px; }
+        .arena {
+            width: 100%;
+            height: 250px;
+            background: radial-gradient(circle, #8b4513 10%, #5d2e0a 90%);
+            border: 5px solid #ffd700;
+            border-radius: 20px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none; /* Jang boshlanganda ko'rinadi */
+        }
+        .chicken {
+            width: 80px;
+            font-size: 50px;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+        #chicken-left { left: 10%; top: 40%; transform: scaleX(-1); }
+        #chicken-right { right: 10%; top: 40%; }
+        
+        .attack-anim { animation: jump 0.3s infinite alternate; }
+        @keyframes jump { 
+            from { transform: translateY(0) scaleX(-1); } 
+            to { transform: translateY(-20px) scaleX(-1); } 
+        }
+
+        .battle-btns { display: flex; gap: 10px; justify-content: center; }
+        .btn { padding: 15px 25px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
+        .create-btn { background: #4caf50; color: white; }
+        .random-btn { background: #ff9800; color: white; }
+    </style>
+</head>
+<body>
+    <div class="battle-container">
+        <h2>🐓 Battle Arena</h2>
+        <div class="stats-bar">Balance: <span id="balance">0.00000</span> USDT</div>
+        
+        <div id="status-text">Choose your battle mode</div>
+
+        <div id="arena" class="arena">
+            <div id="chicken-left" class="chicken">🐓</div>
+            <div id="chicken-right" class="chicken">🥊</div>
+        </div>
+
+        <div class="battle-btns" id="action-btns">
+            <button class="btn create-btn" id="createBattleBtn">Create Battle</button>
+            <button class="btn random-btn" id="randomBattleBtn">Random Join</button>
+        </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script type="module" src="battle.js"></script>
+</body>
+</html>
